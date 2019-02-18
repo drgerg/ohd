@@ -1,0 +1,135 @@
+Mon, 11 Feb 2019 13:56:54 -  - - - - - - - - - - - - - - - - - - - - - - - - - - - -  : __main__.
+Mon, 11 Feb 2019 13:56:54 -   INITIAL CONFIGURATION COMPLETE   : __main__.
+Mon, 11 Feb 2019 13:56:54 - 'HOME' path is: /home/greg/pipy/ohd : __main__.
+Mon, 11 Feb 2019 13:56:54 -  Top of try : __main__.
+Mon, 11 Feb 2019 13:56:54 -  NORMAL STARTUP AT THE TOP OF THE MAIN FUNCTION  : __main__.
+Mon, 11 Feb 2019 13:56:54 -  - - - - - - - - - - - - - - - - - - - - - - - - - - - -  : __main__.
+Mon, 11 Feb 2019 13:56:59 - 'Garage Door Monitor started normally at ' Message Sent : ohdsendmail.
+Mon, 11 Feb 2019 13:56:59 - The getPins thread is running : __main__.
+Mon, 11 Feb 2019 19:10:49 -  - - - - - - - - - - - - - - - - - - - - - - - - - - - -  : __main__.
+Mon, 11 Feb 2019 19:10:49 -   INITIAL CONFIGURATION COMPLETE   : __main__.
+Mon, 11 Feb 2019 19:10:49 - 'HOME' path is: /home/greg/pipy/ohd : __main__.
+Mon, 11 Feb 2019 19:10:49 -  Top of try : __main__.
+Mon, 11 Feb 2019 19:10:49 -  NORMAL STARTUP AT THE TOP OF THE MAIN FUNCTION  : __main__.
+Mon, 11 Feb 2019 19:10:49 -  - - - - - - - - - - - - - - - - - - - - - - - - - - - -  : __main__.
+Mon, 11 Feb 2019 19:10:55 - 'Garage Door Monitor started normally at ' Message Sent : ohdsendmail.
+Mon, 11 Feb 2019 19:10:55 - The getPins thread is running : __main__.
+Mon, 11 Feb 2019 19:16:51 -  - - - - - - - - - - - - - - - - - - - - - - - - - - - -  : __main__.
+Mon, 11 Feb 2019 19:16:51 -   INITIAL CONFIGURATION COMPLETE   : __main__.
+Mon, 11 Feb 2019 19:16:51 - 'HOME' path is: /home/greg/pipy/ohd : __main__.
+Mon, 11 Feb 2019 19:16:51 -  Top of try : __main__.
+Mon, 11 Feb 2019 19:16:51 -  NORMAL STARTUP AT THE TOP OF THE MAIN FUNCTION  : __main__.
+Mon, 11 Feb 2019 19:16:51 -  - - - - - - - - - - - - - - - - - - - - - - - - - - - -  : __main__.
+Mon, 11 Feb 2019 19:16:56 - 'Garage Door Monitor started normally at ' Message Sent : ohdsendmail.
+Mon, 11 Feb 2019 19:16:56 - The getPins thread is running : __main__.
+Mon, 11 Feb 2019 19:19:01 -  - - - - - - - - - - - - - - - - - - - - - - - - - - - -  : __main__.
+Mon, 11 Feb 2019 19:19:01 -   INITIAL CONFIGURATION COMPLETE   : __main__.
+Mon, 11 Feb 2019 19:19:01 - 'HOME' path is: /home/greg/pipy/ohd : __main__.
+Mon, 11 Feb 2019 19:19:01 -  Top of try : __main__.
+Mon, 11 Feb 2019 19:19:01 -  NORMAL STARTUP AT THE TOP OF THE MAIN FUNCTION  : __main__.
+Mon, 11 Feb 2019 19:19:01 -  - - - - - - - - - - - - - - - - - - - - - - - - - - - -  : __main__.
+Mon, 11 Feb 2019 19:19:08 - 'Garage Door Monitor started normally at ' Message Sent : ohdsendmail.
+Mon, 11 Feb 2019 19:19:08 - The getPins thread is running : __main__.
+Mon, 11 Feb 2019 19:20:47 -  - - - - - - - - - - - - - - - - - - - - - - - - - - - -  : __main__.
+Mon, 11 Feb 2019 19:20:47 -   INITIAL CONFIGURATION COMPLETE   : __main__.
+Mon, 11 Feb 2019 19:20:47 - 'HOME' path is: /home/greg/pipy/ohd : __main__.
+Mon, 11 Feb 2019 19:20:47 -  Top of try : __main__.
+Mon, 11 Feb 2019 19:20:47 -  NORMAL STARTUP AT THE TOP OF THE MAIN FUNCTION  : __main__.
+Mon, 11 Feb 2019 19:20:47 -  - - - - - - - - - - - - - - - - - - - - - - - - - - - -  : __main__.
+Mon, 11 Feb 2019 19:20:53 - 'Garage Door Monitor started normally at ' Message Sent : ohdsendmail.
+Mon, 11 Feb 2019 19:20:53 - The getPins thread is running : __main__.
+Mon, 11 Feb 2019 19:21:31 -  - - - - - - - - - - - - - - - - - - - - -  : __main__.
+Mon, 11 Feb 2019 19:21:31 - Cleaning up : __main__.
+Mon, 11 Feb 2019 19:21:31 - getPins dropped out : __main__.
+Mon, 11 Feb 2019 19:21:31 - Shutting down gracefully : __main__.
+Mon, 11 Feb 2019 19:21:36 - 'Shutdown Initiated' Message Sent : ohdsendmail.
+Mon, 11 Feb 2019 19:21:36 - Finished SignalHandler : __main__.
+Mon, 11 Feb 2019 19:21:36 - That's all folks.  Goodbye : __main__.
+Mon, 11 Feb 2019 20:16:10 -  - - - - - - - - - - - - - - - - - - - - - - - - - - - -  : __main__.
+Mon, 11 Feb 2019 20:16:10 -   INITIAL CONFIGURATION COMPLETE   : __main__.
+Mon, 11 Feb 2019 20:16:10 - 'HOME' path is: /home/greg/pipy/ohd : __main__.
+Mon, 11 Feb 2019 20:16:10 -  Top of try : __main__.
+Mon, 11 Feb 2019 20:16:10 -  NORMAL STARTUP AT THE TOP OF THE MAIN FUNCTION  : __main__.
+Mon, 11 Feb 2019 20:16:10 -  - - - - - - - - - - - - - - - - - - - - - - - - - - - -  : __main__.
+Mon, 11 Feb 2019 20:16:16 - 'Garage Door Monitor started normally at ' Message Sent : ohdsendmail.
+Mon, 11 Feb 2019 20:16:16 - The getPins thread is running : __main__.
+Mon, 11 Feb 2019 20:18:25 -  - - - - - - - - - - - - - - - - - - - - - - - - - - - -  : __main__.
+Mon, 11 Feb 2019 20:18:25 -   INITIAL CONFIGURATION COMPLETE   : __main__.
+Mon, 11 Feb 2019 20:18:25 - 'HOME' path is: /home/greg/pipy/ohd : __main__.
+Mon, 11 Feb 2019 20:18:25 -  Top of try : __main__.
+Mon, 11 Feb 2019 20:18:25 -  NORMAL STARTUP AT THE TOP OF THE MAIN FUNCTION  : __main__.
+Mon, 11 Feb 2019 20:18:25 -  - - - - - - - - - - - - - - - - - - - - - - - - - - - -  : __main__.
+Mon, 11 Feb 2019 20:18:32 - 'Garage Door Monitor started normally at ' Message Sent : ohdsendmail.
+Mon, 11 Feb 2019 20:18:32 - The getPins thread is running : __main__.
+Mon, 11 Feb 2019 20:44:27 -  - - - - - - - - - - - - - - - - - - - - - - - - - - - -  : __main__.
+Mon, 11 Feb 2019 20:44:27 -   INITIAL CONFIGURATION COMPLETE   : __main__.
+Mon, 11 Feb 2019 20:44:27 - 'HOME' path is: /home/greg/pipy/ohd : __main__.
+Mon, 11 Feb 2019 20:44:27 -  Top of try : __main__.
+Mon, 11 Feb 2019 20:44:27 -  NORMAL STARTUP AT THE TOP OF THE MAIN FUNCTION  : __main__.
+Mon, 11 Feb 2019 20:44:27 -  - - - - - - - - - - - - - - - - - - - - - - - - - - - -  : __main__.
+Mon, 11 Feb 2019 20:44:33 - 'Garage Door Monitor started normally at ' Message Sent : ohdsendmail.
+Mon, 11 Feb 2019 20:44:33 - The getPins thread is running : __main__.
+Mon, 11 Feb 2019 20:59:30 -  - - - - - - - - - - - - - - - - - - - - - - - - - - - -  : __main__.
+Mon, 11 Feb 2019 20:59:30 -   INITIAL CONFIGURATION COMPLETE   : __main__.
+Mon, 11 Feb 2019 20:59:30 - 'HOME' path is: /home/greg/pipy/ohd : __main__.
+Mon, 11 Feb 2019 20:59:30 -  Top of try : __main__.
+Mon, 11 Feb 2019 20:59:30 -  NORMAL STARTUP AT THE TOP OF THE MAIN FUNCTION  : __main__.
+Mon, 11 Feb 2019 20:59:30 -  - - - - - - - - - - - - - - - - - - - - - - - - - - - -  : __main__.
+Mon, 11 Feb 2019 20:59:36 - 'Garage Door Monitor started normally at ' Message Sent : ohdsendmail.
+Mon, 11 Feb 2019 20:59:36 - The getPins thread is running : __main__.
+Mon, 11 Feb 2019 21:03:59 -  - - - - - - - - - - - - - - - - - - - - - - - - - - - -  : __main__.
+Mon, 11 Feb 2019 21:03:59 -   INITIAL CONFIGURATION COMPLETE   : __main__.
+Mon, 11 Feb 2019 21:03:59 - 'HOME' path is: /home/greg/pipy/ohd : __main__.
+Mon, 11 Feb 2019 21:03:59 -  Top of try : __main__.
+Mon, 11 Feb 2019 21:03:59 -  NORMAL STARTUP AT THE TOP OF THE MAIN FUNCTION  : __main__.
+Mon, 11 Feb 2019 21:03:59 -  - - - - - - - - - - - - - - - - - - - - - - - - - - - -  : __main__.
+Mon, 11 Feb 2019 21:04:04 - 'Garage Door Monitor started normally at ' Message Sent : ohdsendmail.
+Mon, 11 Feb 2019 21:04:04 - The getPins thread is running : __main__.
+Mon, 11 Feb 2019 21:04:26 -  - - - - - - - - - - - - - - - - - - - - -  : __main__.
+Mon, 11 Feb 2019 21:04:26 - getPins dropped out : __main__.
+Mon, 11 Feb 2019 21:04:26 - Cleaning up : __main__.
+Mon, 11 Feb 2019 21:04:26 - Shutting down gracefully : __main__.
+Mon, 11 Feb 2019 21:04:31 - 'Shutdown Initiated' Message Sent : ohdsendmail.
+Mon, 11 Feb 2019 21:04:31 - Finished SignalHandler : __main__.
+Mon, 11 Feb 2019 21:04:31 - That's all folks.  Goodbye : __main__.
+Mon, 11 Feb 2019 21:04:57 -  - - - - - - - - - - - - - - - - - - - - - - - - - - - -  : __main__.
+Mon, 11 Feb 2019 21:04:57 -   INITIAL CONFIGURATION COMPLETE   : __main__.
+Mon, 11 Feb 2019 21:04:57 - 'HOME' path is: /home/greg/pipy/ohd : __main__.
+Mon, 11 Feb 2019 21:04:57 -  Top of try : __main__.
+Mon, 11 Feb 2019 21:04:57 -  NORMAL STARTUP AT THE TOP OF THE MAIN FUNCTION  : __main__.
+Mon, 11 Feb 2019 21:04:57 -  - - - - - - - - - - - - - - - - - - - - - - - - - - - -  : __main__.
+Mon, 11 Feb 2019 21:05:03 - 'Garage Door Monitor started normally at ' Message Sent : ohdsendmail.
+Mon, 11 Feb 2019 21:05:03 - The getPins thread is running : __main__.
+Mon, 11 Feb 2019 21:05:36 - getPins dropped out : __main__.
+Mon, 11 Feb 2019 21:05:36 -  - - - - - - - - - - - - - - - - - - - - -  : __main__.
+Mon, 11 Feb 2019 21:05:36 - Cleaning up : __main__.
+Mon, 11 Feb 2019 21:05:36 - Shutting down gracefully : __main__.
+Mon, 11 Feb 2019 21:05:37 -  - - - - - - - - - - - - - - - - - - - - -  : __main__.
+Mon, 11 Feb 2019 21:05:37 - Cleaning up : __main__.
+Mon, 11 Feb 2019 21:05:37 - Shutting down gracefully : __main__.
+Mon, 11 Feb 2019 21:05:43 - 'Shutdown Initiated' Message Sent : ohdsendmail.
+Mon, 11 Feb 2019 21:05:43 - Finished SignalHandler : __main__.
+Mon, 11 Feb 2019 21:05:43 - That's all folks.  Goodbye : __main__.
+Mon, 11 Feb 2019 21:06:35 -  - - - - - - - - - - - - - - - - - - - - - - - - - - - -  : __main__.
+Mon, 11 Feb 2019 21:06:35 -   INITIAL CONFIGURATION COMPLETE   : __main__.
+Mon, 11 Feb 2019 21:06:35 - 'HOME' path is: /home/greg/pipy/ohd : __main__.
+Mon, 11 Feb 2019 21:06:35 -  Top of try : __main__.
+Mon, 11 Feb 2019 21:06:35 -  NORMAL STARTUP AT THE TOP OF THE MAIN FUNCTION  : __main__.
+Mon, 11 Feb 2019 21:06:35 -  - - - - - - - - - - - - - - - - - - - - - - - - - - - -  : __main__.
+Mon, 11 Feb 2019 21:06:41 - 'Garage Door Monitor started normally at ' Message Sent : ohdsendmail.
+Mon, 11 Feb 2019 21:06:41 - The getPins thread is running : __main__.
+Tue, 12 Feb 2019 06:31:08 - ByPass is OFF and door is OPEN : __main__.
+Tue, 12 Feb 2019 06:31:14 - 'The door is open and ByPass is Off' Message Sent : ohdsendmail.
+Tue, 12 Feb 2019 06:31:38 - Door Closed and ByPass OFF : __main__.
+Tue, 12 Feb 2019 06:31:44 - 'The door is closed and ByPass is Off' Message Sent : ohdsendmail.
+Tue, 12 Feb 2019 06:31:44 - bpFirst set to 0 : __main__.
+Tue, 12 Feb 2019 17:16:14 - ByPass is OFF and door is OPEN : __main__.
+Tue, 12 Feb 2019 17:16:20 - 'The door is open and ByPass is Off' Message Sent : ohdsendmail.
+Tue, 12 Feb 2019 17:17:21 - Logging out : ohdreadmail.
+Tue, 12 Feb 2019 17:17:21 - No Quiet msg.  Returning: [] and Nobody and None : ohdreadmail.
+Tue, 12 Feb 2019 17:17:21 - ohdreadmail.main() returned Auth= None; [], From: Nobody : __main__.
+Tue, 12 Feb 2019 17:17:21 - A minute has gone by.  Restarting time monitoring. Qtest = []. Door is open : __main__.
+Tue, 12 Feb 2019 17:17:27 - 'The door is open and ByPass is Off' Message Sent : ohdsendmail.
+Tue, 12 Feb 2019 17:17:49 - Door Closed and ByPass OFF : __main__.
+Tue, 12 Feb 2019 17:17:54 - 'The door is closed and ByPass is Off' Message Sent : ohdsendmail.
+Tue, 12 Feb 2019 17:17:54 - bpFirst set to 0 : __main__.
