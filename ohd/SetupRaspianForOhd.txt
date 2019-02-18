@@ -71,7 +71,7 @@ $ sudo passwd -l root
 And that's it.
 
 Attribution: https://www.modmypi.com/blog/how-to-change-the-default-account-username-and-password
-  ##############
+   ##############
 
 10. Get ssmtp and set up mail
 
