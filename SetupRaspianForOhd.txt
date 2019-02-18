@@ -1,4 +1,7 @@
-ohd is a program that tells me when the status of my garage door changes.  It monitors the status of a 
+This is the initial set of instructions on how to get from 'nothing but a Pi' to a fully functional
+garage door monitor using ohd.
+
+'ohd' is a program that tells me when the status of my garage door changes.  It monitors the status of a 
 reed switch on the door, and also a pushbutton switch on the housing of the Pi.  It also monitors the time
 and writes everything to a log file.  If the ByPass button is left on past a specified time (9PM at my house), 
 I get notified.
@@ -19,8 +22,8 @@ Next get the OS and get it set up:
 5. Login - username: pi, password: raspberry
 6. Run "sudo raspi-config" at a command prompt
         6a. Select Network
-        6b. Select Hostname
-        6c. Select wifi: SSID and password
+        6b. Select Hostname - give your Pi a name.
+        6c. Select wifi: SSID and password - provide the SSID and password to connect to your network.
         6d. Select localization option: set to your area (en_US_utf-8)
         6e. Select localization option: set timezone
         6f. Select Interfacing options: enable SSH
