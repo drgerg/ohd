@@ -98,7 +98,7 @@ $ nano /etc/ssmtp/ssmtp.conf
         mailhub=smtp.gmail.com:587
 
         FromLineOverride=YES
-        AuthUser=<gmail-user>@gmail.com  # This is the same as MyEmailAdd: in ohd.config
+        AuthUser=<gmail-user>@gmail.com  # This is the same as MyEmailAdd: in ohd.conf
         AuthPass=<gmail-password>        # This is the same as MyPasswd: in ohd.conf
         UseSTARTTLS=YES
         UseTLS=YES
