@@ -1,4 +1,4 @@
-Initial Instructions
+# Initial Instructions
 
 This is the initial set of instructions on how to get from 'nothing but a Pi' to a fully functional
 garage door monitor using ohd.
