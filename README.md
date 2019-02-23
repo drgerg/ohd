@@ -8,8 +8,6 @@ This is that first step.
 
 LIST OF THINGS TO DO
 
-- Select and post schematic of wiring for the Pi.
-
 - Outine the steps in a more concise document.
 
 - Edit instructions to insure use and expections are clearly delineated.
