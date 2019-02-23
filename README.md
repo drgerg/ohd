@@ -8,7 +8,7 @@ the status of those pins.  It sends email (or SMS) messages to specific people.
 I wanted a simple way to keep track of whether my garage door was open or closed.  
 I've been using this now for a few years, and it does exactly what I need.
 
-My Pi is a B+, and the schematic diagram (GarageDoorMonitorRPi2019.pdf) details which pins do what.
+The Pi is a B+, and the schematic diagram (GarageDoorMonitorRPi2019.pdf) details which pins do what.
 I also added a real-time clock module and an Uninterruptable Power Supply to keep it online and
 on time.  The UPS is a home-brew job with a 12V gel cell battery that powers an automotive USB
 12V to 5V converter.  That converter powers the Pi.  Works like a champ.
