@@ -1,4 +1,4 @@
-# ohd - (OverHeadDoor) Garage Door Monitor 
+# ohd - (OverHeadDoor) Garage Door Monitor
 
 Python3, Raspbian learning project
 
