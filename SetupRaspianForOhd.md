@@ -1,9 +1,9 @@
-# Initial Instructions
+## Initial Instructions
 
 This is the initial set of instructions on how to get from 'nothing but a Pi' to a fully functional
 garage door monitor using ohd.
 
-'ohd' is a program that tells me when the status of my garage door changes.  It monitors the status of a 
+**ohd** is a program that tells me when the status of my garage door changes.  It monitors the status of a 
 reed switch on the door, and also a pushbutton switch on the housing of the Pi.  It also monitors the time
 and writes everything to a log file.  If the ByPass button is left on past a specified time (9PM at my house), 
 I get notified.
@@ -31,8 +31,8 @@ Next get the OS and get it set up:
         6f. Select Interfacing options: enable SSH
 
 7. Install pip3:
-        $ sudo apt-get update
-        $ sudo apt-get python3-pip
+        ```$ sudo apt-get update
+        $ sudo apt-get python3-pip```
 
 8. Get the RPi.GPIO module for python3
         $ sudo apt-get install python-rpi.gpio python3-rpi.gpio
