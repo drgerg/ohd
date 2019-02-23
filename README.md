@@ -26,7 +26,7 @@ changes.  Notifications can also be sent by SMS by using the SMS gateway address
 provider.  Mine is Verizon, and so ohd sends an email to 'mycellnumber@vzwpix.com'.  That gets
 translated to SMS and shows up on my phone like any other text.
 
-'ohd' also can receive instructions by email.  There have been times when the door was opened by
+'ohd' also can receive instructions by email or SMS text.  There have been times when the door was opened by
 someone who then failed to press the bypass button.  Like when we had flooring contractors working at
 our house.  We could not reach them, but I was able to send a "quiet" message to the Pi's Gmail address,
 and ohd retrieved that and stopped sending 'door open' notifications.  Very handy.  Currently this is the
