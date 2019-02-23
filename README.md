@@ -21,7 +21,7 @@ every minute.
 
 'ohd' uses Gmail to communicate with the outside world.  I created an account just for this Pi, 
 and it sends emails to a specified list of recipients when the status of the door or ByPass switch
-occurs.  Notifications can also be sent by SMS by using the SMS gateway address of the cell service
+changes.  Notifications can also be sent by SMS by using the SMS gateway address of the cell service
 provider.  Mine is Verizon, and so ohd sends an email to 'mycellnumber@vzwpix.com'.  That gets 
 translated to SMS and shows up on my phone like any other text.
 
