@@ -106,4 +106,4 @@ $ nano /etc/ssmtp/ssmtp.conf
 
 CTRL-X  Y  Enter
 
-Attribution: https://www.algissalys.com/network-security/send-email-from-raspberry-pi-command-line
+*Attribution: https://www.algissalys.com/network-security/send-email-from-raspberry-pi-command-line*
