@@ -17,12 +17,12 @@ Not a huge deal, but it's not good, and it's easy to fix with a small cheap UPS.
 
 Next get the OS and get it set up:
 
-### 1. Download Raspbian (I prefer the one without the graphical interface)
-### 2. Burn to SD card
-### 3. Insert the SD card into the Pi hardware
-### 4. Boot
-### 5. Login - username: pi, password: raspberry
-### 6. Run "sudo raspi-config" at a command prompt
+#### 1. Download Raspbian (I prefer the one without the graphical interface)
+#### 2. Burn to SD card
+#### 3. Insert the SD card into the Pi hardware
+#### 4. Boot
+#### 5. Login - username: pi, password: raspberry
+#### 6. Run "sudo raspi-config" at a command prompt
         6a. Select Network
         6b. Select Hostname - give your Pi a name.
         6c. Select wifi: SSID and password - provide the SSID and password to connect to your network.
@@ -30,14 +30,14 @@ Next get the OS and get it set up:
         6e. Select localization option: set timezone
         6f. Select Interfacing options: enable SSH
 
-### 7. Install pip3:
+#### 7. Install pip3:
 ```$ sudo apt-get update```
 ```$ sudo apt-get python3-pip```
 
-### 8. Get the RPi.GPIO module for python3
+#### 8. Get the RPi.GPIO module for python3
 ```$ sudo apt-get install python-rpi.gpio python3-rpi.gpio```
 
-### 9. Change default user/password:
+#### 9. Change default user/password:
 
 By default your raspberry pi pi comes with an account 'pi' with the password 'raspberry'. 
 For security reasons it's probably a good idea to change the password, but you may also wish to change the 
@@ -84,12 +84,12 @@ And that's it.
 
 *Attribution: https://www.modmypi.com/blog/how-to-change-the-default-account-username-and-password*
 
-### 10. Get ssmtp and set up mail
+#### 10. Get ssmtp and set up mail
 
         $ sudo apt-get install mailutils
         $ sudo apt-get install ssmtp
 
-### 11. Edit /etc/ssmtp.conf
+#### 11. Edit /etc/ssmtp.conf
 
 $ nano /etc/ssmtp/ssmtp.conf
 
