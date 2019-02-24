@@ -1,7 +1,7 @@
 ## Initial Instructions
 
 This is the initial set of instructions on how to get from 'nothing but a Pi' to a fully functional
-garage door monitor using ohd.
+garage door monitor using **ohd**.
 
 **ohd** is a program that tells me when the status of my garage door changes.  It monitors the status of a 
 reed switch on the door, and also a pushbutton switch on the housing of the Pi.  It also monitors the time
