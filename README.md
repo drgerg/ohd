@@ -1,6 +1,6 @@
 ## ohd - (OverHeadDoor) Garage Door Monitor
 
-####Python3, Raspbian learning project
+#### Python3, Raspbian learning project
 
 **ohd** monitors two GPIO pins on a Raspberry Pi and responds based on changes to
 the status of those pins.  It sends email (or SMS) messages to specific people.
