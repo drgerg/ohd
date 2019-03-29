@@ -99,7 +99,7 @@ def main():
 
         elif bpStat == 'Off' and DoorStat == 'open' and openFirst == 1:        # Subsequent times door is found OPEN
             if time.time() - ttStart > tt and Qtest == "[]" and DoorStat == 'open':
-                emAdd = config.get('CommandEmail', 'InBoundEmail1')
+#                emAdd = config.get('CommandEmail', 'InBoundEmail1')           # Legacy hold-over.  Delete after field-test.
                 Qtest, rmFrom, msgAuth = ohdreadmail.main()                    # Check for a Quiet message
                 logger.info("ohdreadmail.main() returned Auth= " +msgAuth + "; "  + Qtest + ", From: " + rmFrom)
                 if Qtest != 'Quiet':
@@ -188,7 +188,7 @@ def main():
 #
     else:
         logger.info("Fell out of the Main() Function")
-        log.flush()
+        logger.flush()
 
 
 def getPins(stop_event):
