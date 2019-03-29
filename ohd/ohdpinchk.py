@@ -37,19 +37,17 @@ def main():
 
 def pinChk():
     global DoorStat
-#    logger.debug("At top of pinChk()")
-    if(GPIO.input(24) == False):
-        DoorStat = 'closed'
-        GPIO.output(25, GPIO.LOW)
-    else:
-        DoorStat = 'open'
-        GPIO.output(25, GPIO.HIGH)
-    logger.debug("Door: " + DoorStat)
-    return DoorStat
+    if(GPIO.input(24) == False):            # If the magnetic reed switch is open
+        DoorStat = 'closed'                 # set the variable to 'closed'
+        GPIO.output(25, GPIO.LOW)           # put pin 25 LOW, meaning the LED is off
+    else:                                   # otherwise, the reed switch is closed
+        DoorStat = 'open'                   # set the variable to 'open'
+        GPIO.output(25, GPIO.HIGH)          # so put pin 25 HIGH, turning the LED on
+    logger.debug("Door: " + DoorStat)       # write stuff in the ohd.log file if '-d' debug mode is on
+    return DoorStat                         # return the variable 'DoorStat' to the calling routine
 
 def bpChk():
-    global bpStat
-#    logger.debug("At top of bpChk()")
+    global bpStat                           # the same stuff happens here, just a different set of pins
     if(GPIO.input(12) == False):
         bpStat = 'On'
         GPIO.output(21, GPIO.HIGH)
