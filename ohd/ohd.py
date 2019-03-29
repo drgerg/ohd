@@ -19,7 +19,6 @@ import RPi.GPIO as GPIO
 import ohdpinchk
 import ohdsendmail
 import ohdreadmail
-# import ohdtimer -- pretty sure I won't be using this anymore.
 #
 ## Command line arguments parsing
 #
@@ -35,7 +34,7 @@ ohdHome = os.getcwd()
 ## ConfigParser init area.  Get some info out of working.conf.
 #
 config = configparser.ConfigParser()
-config.readfp(open(ohdHome + '/ohd.conf'))  # I need to do some 'Environment' stuff here instead of hardcoding that path.
+config.readfp(open(ohdHome + '/ohd.conf'))  
 #
 ## End ConfigParser init
 #
@@ -71,7 +70,7 @@ def main():
     tt = 60
     bpFirst = 0
     openFirst = 0
-    ohdsendmail.msgS("GarMon Status Change", "Garage Door Monitor started normally at ")
+    ohdsendmail.msgS("OHD Status Change", "Garage Door Monitor started normally at ")
     pill2kill = threading.Event()
     pt = threading.Thread(target=getPins, args=(pill2kill,))
     pt.start()
@@ -82,14 +81,13 @@ def main():
     logger.info("The getPins thread is " +  pcT)
 
     while True:
-#        logger.warning("1. bpStat: " + bpStat + ", ByPassFirst: " + str(bpFirst) + ", DoorStat: " + DoorStat + ", openFirst: " + str(bpFirst) + ", Qtest: " + Qtest)
 #
 ## ByPass Off and Door CLOSED is the normal state.  Nothing needs to be done.
 #
 #
 ## ByPass OFF and Door OPEN - - this is the ALARM STATE
 #
-        if bpStat == 'Off' and DoorStat == 'open' and openFirst == 0:   # First time: Notify Door is OPEN
+        if bpStat == 'Off' and DoorStat == 'open' and openFirst == 0:          # First time: Notify Door is OPEN
             logger.info("ByPass is OFF and door is OPEN")
             openFirst = 1
             bpFirst = 0
@@ -99,11 +97,10 @@ def main():
             ttStart = time.time()                                              # Capture the time in ttStart
 
 
-        elif bpStat == 'Off' and DoorStat == 'open' and openFirst == 1: # Subsequent times
-#            logger.debug("Test1: bPStat: " + bpStat + ". DoorStat: " + DoorStat + ": openFirst: " + str(openFirst) + "                 ")
+        elif bpStat == 'Off' and DoorStat == 'open' and openFirst == 1:        # Subsequent times door is found OPEN
             if time.time() - ttStart > tt and Qtest == "[]" and DoorStat == 'open':
                 emAdd = config.get('CommandEmail', 'InBoundEmail1')
-                Qtest, rmFrom, msgAuth = ohdreadmail.main()                     # Check for a Quiet message
+                Qtest, rmFrom, msgAuth = ohdreadmail.main()                    # Check for a Quiet message
                 logger.info("ohdreadmail.main() returned Auth= " +msgAuth + "; "  + Qtest + ", From: " + rmFrom)
                 if Qtest != 'Quiet':
                    logger.info("A minute has gone by.  Restarting time monitoring. Qtest = " + Qtest + ". Door is " + DoorStat) 
@@ -188,7 +185,6 @@ def main():
 
 #
 ## When something stops all this from being True, then we fall off the planet.
-## I probably need do some exception catching stuff here . . .
 #
     else:
         logger.info("Fell out of the Main() Function")
@@ -213,7 +209,7 @@ def SignalHandler(signal, frame):
         GPIO.cleanup()
         logger.debug("Finished GPIO.cleanup() in SignalHandler")
         logger.info("Shutting down gracefully")
-        ohdsendmail.msgS("GarMon Status Change", "Shutdown Initiated")
+        ohdsendmail.msgS("OHD Status Change", "Shutdown Initiated")
         logger.debug("Sent 'Shutdown Now' message")
         logger.debug("Wrote to log in SignalHandler")
         logger.info("Finished SignalHandler")
