@@ -116,7 +116,7 @@ We're using the "systemd" method for running things as a service.  I don't under
 
 We need to create a file in the /etc/systemd/system/ folder called "ohd.service".
 
-```$ nano /etc/systemd/system/ohd.service```
+```$ sudo nano /etc/systemd/system/ohd.service```
 
 That file tells the system different things about ohd.py.  It tells it where it lives, and how and when to run it.
 
