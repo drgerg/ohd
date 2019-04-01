@@ -86,12 +86,14 @@ And that's it.
 
 #### 10. Get ssmtp and set up mail
 
-        $ sudo apt-get install mailutils
-        $ sudo apt-get install ssmtp
+```$ sudo apt-get install mailutils```
+```$ sudo apt-get install ssmtp```
 
 #### 11. Edit /etc/ssmtp.conf
 
-$ nano /etc/ssmtp/ssmtp.conf
+By the way: the brackets "<>" should not be typed around the "gmail-user" text. They are there to help delineate the example text as example text.  Nor should they be typed around the password.
+
+```$ nano /etc/ssmtp/ssmtp.conf```
 
         root=<gmail-user>@gmail.com
         mailhub=smtp.gmail.com:587
@@ -107,3 +109,50 @@ $ nano /etc/ssmtp/ssmtp.conf
 CTRL-X  Y  Enter
 
 *Attribution: https://www.algissalys.com/network-security/send-email-from-raspberry-pi-command-line*
+
+#### 12. Set ohd to run on boot
+
+We're using the "systemd" method for running things as a service.  I don't understand exactly how it works, I just know it does.  That's enough for me at this point.  It's not that hard.  Don't be afraid.
+
+We need to create a file in the /etc/systemd/system/ folder called "ohd.service".
+
+```$ nano /etc/systemd/system/ohd.service```
+
+That file tells the system different things about ohd.py.  It tells it where it lives, and how and when to run it.
+
+```
+[Unit]
+Description=Garage door monitor, 2019 update. ohd.service
+After=network.target
+
+[Service]
+ExecStart=put_the_path_here/ohd/ohd.py  # the full path to ohd.py
+WorkingDirectory=put_the_path_here/ohd/ # the full path to the ohd folder
+StandardOutput=syslog
+StandardError=syslog
+User=put_the_user_name_here             # usually your name as the user
+ExecStop = /bin/kill -2 $MAINPID
+
+[Install]
+WantedBy=multi-user.target
+```
+
+For example, my ExecStart line is: ```ExecStart=/home/greg/ohd/ohd.py```
+and my User line is: ```User=greg```
+
+Save the file, and then we need to make sure it has the proper ownership.
+
+```$ sudo chown root:root /etc/systemd/system/ohd.service```
+
+I always list the directory to verify things are as they should be.
+
+```$ ls -la /etc/systemd/system```
+
+Now there are two command that we need to run in order to get this file recognized and incorporated into the system's boot processes:
+
+```$ sudo systemctl daemon-reload```
+```$ sudo systemctl enable ohd.service```
+
+
+
+

@@ -1,0 +1,14 @@
+[Unit]
+Description=Garage door monitor, 2019 update. ohd.service
+After=network.target
+
+[Service]
+ExecStart=put_the_path_here/ohd/ohd.py  # the full path to ohd.py
+WorkingDirectory=put_the_path_here/ohd/ # the full path to the ohd folder
+StandardOutput=syslog
+StandardError=syslog
+User=put_the_user_name_here             # usually your name as the user
+ExecStop = /bin/kill -2 $MAINPID
+
+[Install]
+WantedBy=multi-user.target
