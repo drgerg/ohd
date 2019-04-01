@@ -156,8 +156,11 @@ Now there are two commands that we need to run in order to get this file recogni
 
 At this point ohd.py should be run when your Pi reboots.  You can also control it by using the "service" command set:
 ```$ sudo service ohd start```
+
 ```$ sudo service ohd stop```
+
 ```$ sudo service ohd restart```
+
 ```$ sudo service ohd status```
 
 You can always learn more about commands by typing something like:
