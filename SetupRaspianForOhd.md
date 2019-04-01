@@ -148,11 +148,20 @@ I always list the directory to verify things are as they should be.
 
 ```$ ls -la /etc/systemd/system```
 
-Now there are two command that we need to run in order to get this file recognized and incorporated into the system's boot processes:
+Now there are two commands that we need to run in order to get this file recognized and incorporated into the system's boot processes:
 
 ```$ sudo systemctl daemon-reload```
+
 ```$ sudo systemctl enable ohd.service```
 
+At this point ohd.py should be run when your Pi reboots.  You can also control it by using the "service" command set:
+```$ sudo service ohd start```
+```$ sudo service ohd stop```
+```$ sudo service ohd restart```
+```$ sudo service ohd status```
 
+You can always learn more about commands by typing something like:
+```$ man service```
 
+At this point, things should be working as expected.  If not, well . . . something's wrong.  We'll have to figure it out.  But I'm pretty sure we've covered all the bases here.  
 
