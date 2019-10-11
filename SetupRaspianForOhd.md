@@ -32,6 +32,7 @@ Next get the OS and get it set up:
 
 #### 7. Install pip3:
 ```$ sudo apt-get update```
+
 ```$ sudo apt-get install python3-pip```
 
 #### 8. Get the RPi.GPIO module for python3
