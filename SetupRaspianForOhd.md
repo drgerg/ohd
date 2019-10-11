@@ -36,7 +36,7 @@ Next get the OS and get it set up:
 ```$ sudo apt-get install python3-pip```
 
 #### 8. Get the RPi.GPIO module for python3
-```$ sudo apt-get install python-rpi.gpio python3-rpi.gpio```
+```$ sudo apt-get install python3-rpi.gpio```
 
 #### 9. Change default user/password:
 
