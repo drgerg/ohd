@@ -31,8 +31,8 @@ Next get the OS and get it set up:
         6f. Select Interfacing options: enable SSH
 
 #### 7. Install pip3:
-```$ sudo apt-get update```
-```$ sudo apt-get python3-pip```
+```$ sudo apt-get update
+$ sudo apt-get install python3-pip```
 
 #### 8. Get the RPi.GPIO module for python3
 ```$ sudo apt-get install python-rpi.gpio python3-rpi.gpio```
