@@ -88,6 +88,7 @@ And that's it.
 #### 10. Get ssmtp and set up mail
 
 ```$ sudo apt-get install mailutils```
+
 ```$ sudo apt-get install ssmtp```
 
 #### 11. Edit /etc/ssmtp.conf
