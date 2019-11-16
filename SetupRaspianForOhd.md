@@ -85,32 +85,73 @@ And that's it.
 
 *Attribution: https://www.modmypi.com/blog/how-to-change-the-default-account-username-and-password*
 
-#### 10. Get ssmtp and set up mail
+#### 10. Get msmtp and set up mail (Formerly: Get ssmtp and set up mail)
 
-```$ sudo apt-get install mailutils```
+ssmtp worked great on Raspbian Jessie, but not on Buster.  So we have to change mail utilities.  You can learn more here: https://wiki.archlinux.org/index.php/Msmtp . 
+Here is the homepage for msmtp: https://marlam.de/msmtp/ .
 
-```$ sudo apt-get install ssmtp```
+(All the posts I read on getting msmtp to work did not include this: ```$ sudo apt-get install mailutils```  I'm not sure at this point whether or not to use it.  I already have, so I'm going to leave it in here just in case it prompts someone to a solution some issue.)
 
-#### 11. Edit /etc/ssmtp.conf
+```$ sudo apt-get install msmtp msmtp-mta```
+
+After it finishes installing, run this next command to get a basic config file.  It doesn't create the file, but it provides you with stuff to put in one.
+
+```msmtp --configure yourEmail@gmail.com```
+
+        # - copy this to your configuration file /home/greg/.msmtprc
+        # - encrypt your password:
+        #   gpg -e -o ~/.msmtp-password.gpg
+        account yourEmail@gmail.com
+        host smtp.gmail.com
+        port 587
+        tls on
+        tls_starttls on
+        auth on
+        user yourEmail
+        passwordeval gpg --no-tty -q -d ~/.msmtp-password.gpg
+        from yourEmail@gmail.com
+
+
+
+#### 11. Create /etc/msmtprc
 
 By the way: the brackets "<>" should not be typed around the "gmail-user" text. They are there to help delineate the example text as example text.  Nor should they be typed around the password.
 
-```$ nano /etc/ssmtp/ssmtp.conf```
+```$ nano /etc/ssmtp/msmtprc```
 
-        root=<gmail-user>@gmail.com
-        mailhub=smtp.gmail.com:587
+        # Set default values for all following accounts.
+        defaults
+        auth           on
+        tls            on
+        tls_trust_file /etc/ssl/certs/ca-certificates.crt
+        #logfile        ~/.msmtp.log
+        syslog LOG_MAIL
 
-        FromLineOverride=YES
-        AuthUser=<gmail-user>@gmail.com  # This is the same as MyEmailAdd: in ohd.conf
-        AuthPass=<gmail-password>        # This is the same as MyPasswd: in ohd.conf
-        UseSTARTTLS=YES
-        UseTLS=YES
+        # Gmail
+        account        gmail
+        host           smtp.gmail.com
+        port           587
+        from           yourEmail @gmail.com
+        user           emailUserName
+        password       password-in-plaintext
 
-        # Debug=Yes
+        # Set a default account
+        account default : gmail        
+
 
 CTRL-X  Y  Enter
 
-*Attribution: https://www.algissalys.com/network-security/send-email-from-raspberry-pi-command-line*
+It is relatively safe to leave the email password in plainText IF you are using the hardware in a safe place (limited access by outsiders).  In order to make it a bit safer, follow these instructions from the README.Debian file found in /usr/share/doc/msmtp:
+
+        The system-wide configuration file (/etc/msmtprc) can contain SMTP credentials
+        that are best kept secret. To let regular users use msmtp while preventing them
+        from reading the file, the permissions can be adjusted that way:
+
+        # chmod 0640 /etc/msmtprc
+        # chgrp msmtp /etc/msmtprc
+
+        So that msmtp's binary executing as the "msmtp" group (setgid) can access it.
+
 
 #### 12. Set ohd to run on boot
 
