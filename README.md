@@ -31,3 +31,6 @@ someone who then failed to press the bypass button.  Like when we had flooring c
 our house.  We could not reach them, but I was able to send a "quiet" message to the Pi's Gmail address,
 and ohd retrieved that and stopped sending 'door open' notifications.  Very handy.  Currently this is the
 only command **ohd** acts on.
+
+I provided some [instructions](./SetupRaspianForOhd.md) to go from a brand new Pi to a functioning **ohd** system. 
+The normal caveats apply . . . your mileage may vary.
