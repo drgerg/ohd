@@ -119,7 +119,7 @@ You have the choice to use individual config files for individual users, or one 
 
 There is only one user in my setup, so I chose the system-wide configuration file.  It is housed in the /etc folder.  You will need to create it using the following command:
 
-```$ nano /etc/msmtprc```
+```$ sudo nano /etc/msmtprc```
 
         # Set default values for all following accounts.
         defaults
