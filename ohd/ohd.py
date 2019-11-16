@@ -16,9 +16,11 @@ import time
 import signal
 import threading
 import RPi.GPIO as GPIO
+import socket
 import ohdpinchk
 import ohdsendmail
 import ohdreadmail
+# import ohdtimer -- pretty sure I won't be using this anymore.
 #
 ## Command line arguments parsing
 #
@@ -34,7 +36,7 @@ ohdHome = os.getcwd()
 ## ConfigParser init area.  Get some info out of working.conf.
 #
 config = configparser.ConfigParser()
-config.readfp(open(ohdHome + '/ohd.conf'))  
+config.read_file(open(ohdHome + '/ohd.conf'))
 #
 ## End ConfigParser init
 #
@@ -45,6 +47,7 @@ logger = logging.getLogger(__name__)
 argsohd = parserohd.parse_args()
 
 if argsohd.debug:
+    import traceback
     logging.basicConfig(filename=ohdHome + '/ohd.log', format='[%(name)s]:%(levelname)s: %(message)s. - %(asctime)s', datefmt='%D %H:%M:%S', level=logging.DEBUG)
     logging.info("Debugging output enabled")
 else:
@@ -55,22 +58,24 @@ else:
 logger.info(" - - - - - - - - - - - - - - - - - - - - - - - - - - - - ")
 logger.info("  INITIAL CONFIGURATION COMPLETE  ")
 logger.info("'HOME' path is: " + ohdHome)
-global DoorStat, bpStat, pill2kill, Qtest, openFirst, bpFirst, tt, QmsgRcvdSent, bpLimit, bpLimNot
+global DoorStat, bpStat, pirStat, pill2kill, Qtest, openFirst, bpFirst, tt, QmsgRcvdSent, bpLimit, bpLimNot
 DoorStat = "closed"
 bpStat = "Off"
+pirStat = "normal"
 Qtest = "[]"
 QmsgRcvdSent = 0
 bpLimit = config.getint('Notify', 'NotifyBPLimit')
 bpLimNot = 0
 
 def main():
-    global DoorStat, bpStat, pill2kill, Qtest, openFirst, bpFirst, tt, QmsgRcvdSent, bpLimit, bpLimNot
+    global DoorStat, bpStat, pill2kill, Qtest, openFirst, bpFirst, tt, QmsgRcvdSent, bpLimit, bpLimNot, mdMsgSent, tStart
     logger.info(" NORMAL STARTUP AT THE TOP OF THE MAIN FUNCTION ")
     logger.info(" - - - - - - - - - - - - - - - - - - - - - - - - - - - - ")
     tt = 60
     bpFirst = 0
     openFirst = 0
-    ohdsendmail.msgS("OHD Status Change", "Garage Door Monitor started normally at ")
+    mdMsgSent = 0
+    ohdsendmail.msgS("GarMon Status Change", "Garage Door Monitor started normally at ")
     pill2kill = threading.Event()
     pt = threading.Thread(target=getPins, args=(pill2kill,))
     pt.start()
@@ -81,13 +86,14 @@ def main():
     logger.info("The getPins thread is " +  pcT)
 
     while True:
+#        logger.warning("1. bpStat: " + bpStat + ", ByPassFirst: " + str(bpFirst) + ", DoorStat: " + DoorStat + ", openFirst: " + str(bpFirst) + ", Qtest: " + Qtest)
 #
 ## ByPass Off and Door CLOSED is the normal state.  Nothing needs to be done.
 #
 #
 ## ByPass OFF and Door OPEN - - this is the ALARM STATE
 #
-        if bpStat == 'Off' and DoorStat == 'open' and openFirst == 0:          # First time: Notify Door is OPEN
+        if bpStat == 'Off' and DoorStat == 'open' and openFirst == 0:   # First time: Notify Door is OPEN
             logger.info("ByPass is OFF and door is OPEN")
             openFirst = 1
             bpFirst = 0
@@ -97,10 +103,11 @@ def main():
             ttStart = time.time()                                              # Capture the time in ttStart
 
 
-        elif bpStat == 'Off' and DoorStat == 'open' and openFirst == 1:        # Subsequent times door is found OPEN
+        elif bpStat == 'Off' and DoorStat == 'open' and openFirst == 1: # Subsequent times
+#            logger.debug("Test1: bPStat: " + bpStat + ". DoorStat: " + DoorStat + ": openFirst: " + str(openFirst) + "                 ")
             if time.time() - ttStart > tt and Qtest == "[]" and DoorStat == 'open':
-#                emAdd = config.get('CommandEmail', 'InBoundEmail1')           # Legacy hold-over.  Delete after field-test.
-                Qtest, rmFrom, msgAuth = ohdreadmail.main()                    # Check for a Quiet message
+                emAdd = config.get('CommandEmail', 'InBoundEmail1')
+                Qtest, rmFrom, msgAuth = ohdreadmail.main()                     # Check for a Quiet message
                 logger.info("ohdreadmail.main() returned Auth= " +msgAuth + "; "  + Qtest + ", From: " + rmFrom)
                 if Qtest != 'Quiet':
                    logger.info("A minute has gone by.  Restarting time monitoring. Qtest = " + Qtest + ". Door is " + DoorStat) 
@@ -184,18 +191,51 @@ def main():
             bpLimNot = 1            # set to 1 to prevent repeating messages about the time of day.
 
 #
+## Check the PIR Motion Detector's status.
+#
+        if pirStat == 'triggered':
+            mdDelay = config.get('MotionDetector', 'PirDelay')
+            logger.debug("Start of the first IF. mdMsgSent is: " + str(mdMsgSent) + " mdDelay is " + str(mdDelay))
+            if mdMsgSent == 0:
+                tStart = time.time()                                              # Capture the time in tStart
+                sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                sock.connect(('192.168.1.22', 6802))
+                sock.send(b'6|on+20|25|PIR_Tripped|PIR|PIR \n7|on+20|25|PIR_Tripped|PIR|PIR \n8|on+40|25|PIR_Tripped|PIR|PIR \n9|on+40|25|PIR_Tripped|PIR|PIR')
+                ohdsendmail.msgS("PIR", "The Front Porch motion detector was tripped.")
+                received = str(sock.recv(1024), "utf-8")
+                logger.info("Motion detector was triggered.")
+                mdMsgSent = 1
+                logger.debug("Last line of the first IF and mdMsgSent is " + str(mdMsgSent))
+
+            elif mdMsgSent == 1:
+                tFollow = time.time()
+                tKill = tStart + float(mdDelay)
+                logger.debug("                    tStart is: " + str(tStart))
+                logger.debug("Third line of ELIF.   tKill is " + str(tKill) + " and mdDelay is " + str(mdDelay))
+                tDiff = tKill - tFollow
+                logger.debug("                      tDiff is " + str(tDiff))
+                if tFollow > tKill:
+                    mdMsgSent = 0
+        else:
+            if mdMsgSent == 1:
+                mdMsgSent = 0
+#                    pass
+
+#
 ## When something stops all this from being True, then we fall off the planet.
+## I probably need do some exception catching stuff here . . .
 #
     else:
         logger.info("Fell out of the Main() Function")
-        logger.flush()
+        log.flush()
 
 
 def getPins(stop_event):
-    global DoorStat, bpStat, pill2kill, Qtest, openFirst, bpFirst, tt
+    global DoorStat, bpStat, pirStat, pill2kill, Qtest, openFirst, bpFirst, tt
     while not stop_event.wait(1):
         DoorStat = ohdpinchk.pinChk()
         bpStat = ohdpinchk.bpChk()
+        pirStat = ohdpinchk.pirChk()
     else:
         logger.info("getPins dropped out")
         pass
@@ -209,29 +249,31 @@ def SignalHandler(signal, frame):
         GPIO.cleanup()
         logger.debug("Finished GPIO.cleanup() in SignalHandler")
         logger.info("Shutting down gracefully")
-        ohdsendmail.msgS("OHD Status Change", "Shutdown Initiated")
+        ohdsendmail.msgS("ohd Status Change", "Shutdown Initiated")
         logger.debug("Sent 'Shutdown Now' message")
         logger.debug("Wrote to log in SignalHandler")
         logger.info("Finished SignalHandler")
-        logger.flush()
-        logger.close()
+#        logger.flush()
+#        logger.close()
         sys.exit(0)
 
 
 
 if __name__ == "__main__":
         global pill2kill
+        import traceback
         try:
-            signal.signal(signal.SIGINT, SignalHandler)
-            signal.signal(signal.SIGTERM, SignalHandler)
+            signal.signal(signal.SIGINT, SignalHandler)  ## This one catches CTRL-C from the local keyboard
+            signal.signal(signal.SIGTERM, SignalHandler) ## This one catches the Terminate signal from the system
             logger.info(" Top of try")
             while True:
                 main()
             pass
 
-
             logger.info("Bottom of try")
-            logger.flush()
-        except:
+#            logger.flush()
+        except Exception:
             pill2kill.set()
+            error = traceback.print_exc()
+            logger.debug(error)
             logger.info("That's all folks.  Goodbye")

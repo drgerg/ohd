@@ -15,8 +15,8 @@ import email
 ## ConfigParser init area.  Get some info out of working.conf.
 #
 ohdHome = os.getcwd()
-config = configparser.ConfigParser()
-config.read_file(open(ohdHome + '/ohd.conf'))
+config = configparser.RawConfigParser()
+config.read(ohdHome + '/ohd.conf')
 logger = logging.getLogger(__name__)
 logger.debug("Connecting to Retrieve Message")
  
@@ -36,15 +36,15 @@ def main():
     for x in range(1, x+1):
         AuthAdds.append(config.get('CommandEmail', 'InBoundEmail' + str(x)))
     logger.debug("x is: " + str(x))                         # x is the number of email addresses configured in ohd.conf
-    mail = imaplib.IMAP4_SSL('imap.gmail.com')
-    mail.login(login,pswd)
-    mail.list()                                           # Gives list of folders or labels in gmail.
+    mail = imaplib.IMAP4_SSL('imap.gmail.com');
+    mail.login(login,pswd);
+    mail.list();                                            # Gives list of folders or labels in gmail.
                                                             # Connect to inbox
-    mail.select("INBOX")
+    mail.select("INBOX");
                                                             # Retrieve a list of all message IDs
-    result2, all_uids = mail.uid('search', None, 'ALL')
+    result2, all_uids = mail.uid('search', None, 'ALL');
                                                             # Retrieve a list of ID for messages that contain 'Quiet'
-    result3, rcvdMsgAny = mail.search(None, 'X-GM-RAW', "Quiet")
+    result3, rcvdMsgAny = mail.search(None, 'X-GM-RAW', "Quiet");
     logger.debug("Result3: " + str(result3))
 
     logger.debug("all_uids: " + str(all_uids))              # Show me all the IDs
@@ -54,8 +54,8 @@ def main():
     fromAdds = []
     if str(id_list) != '[]':                                # as long as the list isn't empty, do these things
         for q_email_id in id_list:                          # from search for 'Quiet'
-            result, mdata = mail.fetch(q_email_id, "(RFC822)")
-            raw_email = mdata[0][1]                         # get the raw email data.  It is byte literal type
+            result, mdata = mail.fetch(q_email_id, "(RFC822)");
+            raw_email = mdata[0][1];                        # get the raw email data.  It is byte literal type
             raw_email_string = raw_email.decode('utf-8')    # turn the data into a string type
             recv_msg = email.message_from_string(raw_email_string)
             fromAdds.append(email.utils.parseaddr(recv_msg['From'])[1])

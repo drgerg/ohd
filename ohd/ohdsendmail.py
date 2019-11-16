@@ -14,8 +14,8 @@ import ohdpinchk
 ## ConfigParser init area.  Get some info out of working.conf.
 #
 ohdHome = os.getcwd()
-config = configparser.ConfigParser()
-config.readfp(open(ohdHome + '/ohd.conf'))
+config = configparser.RawConfigParser()
+config.read(ohdHome + '/ohd.conf')
 #
 ## End ConfigParser init
 

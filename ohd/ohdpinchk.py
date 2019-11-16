@@ -20,6 +20,7 @@ GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(12, GPIO.IN, pull_up_down = GPIO.PUD_UP)
 GPIO.setup(24, GPIO.IN, pull_up_down = GPIO.PUD_UP)
+GPIO.setup(27, GPIO.IN, pull_up_down = GPIO.PUD_UP)
 GPIO.setup(25, GPIO.OUT)
 GPIO.setup(21, GPIO.OUT)
 logger.debug("All them little GPIOs are set up")
@@ -30,24 +31,34 @@ def main():
 
     logger.debug("Started the Main() function")
     time.sleep(1)
-    logger.info("The door is " + pinChk() + ". Bypass is " + bpChk())
+    logger.info("The door is " + pinChk() + ". Bypass is " + bpChk() +". Motion is " + pirChk())
     logger.debug("Finished the Main() function")
 
 
+def pirChk():
+    global pirStat
+    if(GPIO.input(27) == False):
+        pirStat = 'normal'
+    else:
+        pirStat = 'triggered'
+    logger.debug("PIR: " + pirStat)
+    return pirStat
 
 def pinChk():
     global DoorStat
-    if(GPIO.input(24) == False):            # If the magnetic reed switch is open
-        DoorStat = 'closed'                 # set the variable to 'closed'
-        GPIO.output(25, GPIO.LOW)           # put pin 25 LOW, meaning the LED is off
-    else:                                   # otherwise, the reed switch is closed
-        DoorStat = 'open'                   # set the variable to 'open'
-        GPIO.output(25, GPIO.HIGH)          # so put pin 25 HIGH, turning the LED on
-    logger.debug("Door: " + DoorStat)       # write stuff in the ohd.log file if '-d' debug mode is on
-    return DoorStat                         # return the variable 'DoorStat' to the calling routine
+#    logger.debug("At top of pinChk()")
+    if(GPIO.input(24) == False):
+        DoorStat = 'closed'
+        GPIO.output(25, GPIO.LOW)
+    else:
+        DoorStat = 'open'
+        GPIO.output(25, GPIO.HIGH)
+    logger.debug("Door: " + DoorStat)
+    return DoorStat
 
 def bpChk():
-    global bpStat                           # the same stuff happens here, just a different set of pins
+    global bpStat
+#    logger.debug("At top of bpChk()")
     if(GPIO.input(12) == False):
         bpStat = 'On'
         GPIO.output(21, GPIO.HIGH)
