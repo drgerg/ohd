@@ -121,6 +121,8 @@ There is only one user in my setup, so I chose the system-wide configuration fil
 
 ```$ sudo nano /etc/msmtprc```
 
+Then paste in this block of stuff and edit the personal items to reflect your current reality.
+
         # Set default values for all following accounts.
         defaults
         auth           on
@@ -154,8 +156,28 @@ It is relatively safe to leave the email password in plainText IF you are using 
 
         So that msmtp's binary executing as the "msmtp" group (setgid) can access it.
 
+#### 12.  Edit the /etc/aliases file
 
-#### 12. Set ohd to run on boot
+This is a new step brought on by the need to use msmtp in Raspbian Buster.  If you installed mailutils, the aliases file should be in /etc.  If it isn't, running this command will create it and set you to editing.  Whether the file is blank, or already there, add the line "root: yourEmail@gmail.com".  (I put a ==> pointing to it)
+
+```$ sudo nano /etc/aliases```
+
+        # /etc/aliases
+  ==>   root: unit16of16@gmail.com
+        mailer-daemon: postmaster
+        postmaster: root
+        nobody: root
+        hostmaster: root
+        usenet: root
+        news: root
+        webmaster: root
+        www: root
+        ftp: root
+        abuse: root
+        noc: root
+        security: root
+
+#### 13. Set ohd to run on boot
 
 We're using the "systemd" method for running things as a service.  I don't understand exactly how it works, I just know it does.  That's enough for me at this point.  It's not that hard.  Don't be afraid.
 
