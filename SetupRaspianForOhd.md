@@ -90,7 +90,9 @@ And that's it.
 ssmtp worked great on Raspbian Jessie, but not on Buster.  So we have to change mail utilities.  You can learn more here: https://wiki.archlinux.org/index.php/Msmtp . 
 Here is the homepage for msmtp: https://marlam.de/msmtp/ .
 
-(All the posts I read on getting msmtp to work did not include this: ```$ sudo apt-get install mailutils```  I'm not sure at this point whether or not to use it.  I already have, so I'm going to leave it in here just in case it prompts someone to a solution some issue.)
+(All the posts I read on getting msmtp to work did not include this: ```$ sudo apt-get install mailutils```  I'm not sure at this point whether or not to use it.  I already have, so I'm going to leave it in here just in case it prompts someone to a solution for some issue.)
+
+Install msmtp and msmtp-mta:
 
 ```$ sudo apt-get install msmtp msmtp-mta```
 
