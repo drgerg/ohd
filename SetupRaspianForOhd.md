@@ -163,7 +163,7 @@ This is a new step brought on by the need to use msmtp in Raspbian Buster.  If y
 ```$ sudo nano /etc/aliases```
 
         # /etc/aliases
-        root: unit16of16@gmail.com
+        root: yourEmail@gmail.com
         mailer-daemon: postmaster
         postmaster: root
         nobody: root
