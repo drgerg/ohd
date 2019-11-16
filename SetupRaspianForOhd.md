@@ -177,6 +177,8 @@ This is a new step brought on by the need to use msmtp in Raspbian Buster.  If y
         noc: root
         security: root
 
+CTRL-X  Y  Enter
+
 #### 13. Set ohd to run on boot
 
 We're using the "systemd" method for running things as a service.  I don't understand exactly how it works, I just know it does.  That's enough for me at this point.  It's not that hard.  Don't be afraid.
