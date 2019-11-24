@@ -68,7 +68,7 @@ bpLimit = config.getint('Notify', 'NotifyBPLimit')
 bpLimNot = 0
 
 def main():
-    global DoorStat, bpStat, pill2kill, Qtest, openFirst, bpFirst, tt, QmsgRcvdSent, bpLimit, bpLimNot, mdMsgSent, tStart
+    global DoorStat, bpStat, pill2kill, Qtest, openFirst, bpFirst, tt, QmsgRcvdSent, bpLimit, bpLimNot, mdMsgSent, tStart, pirStat, tFollow
     logger.info(" NORMAL STARTUP AT THE TOP OF THE MAIN FUNCTION ")
     logger.info(" - - - - - - - - - - - - - - - - - - - - - - - - - - - - ")
     tt = 60
@@ -198,6 +198,7 @@ def main():
             logger.debug("Start of the first IF. mdMsgSent is: " + str(mdMsgSent) + " mdDelay is " + str(mdDelay))
             if mdMsgSent == 0:
                 tStart = time.time()                                              # Capture the time in tStart
+                tKill = tStart + float(mdDelay)
                 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 sock.connect(('192.168.1.22', 6802))
                 sock.send(b'6|on+20|25|PIR_Tripped|PIR|PIR \n7|on+20|25|PIR_Tripped|PIR|PIR \n8|on+40|25|PIR_Tripped|PIR|PIR \n9|on+40|25|PIR_Tripped|PIR|PIR')
@@ -205,21 +206,21 @@ def main():
                 received = str(sock.recv(1024), "utf-8")
                 logger.info("Motion detector was triggered.")
                 mdMsgSent = 1
-                logger.debug("Last line of the first IF and mdMsgSent is " + str(mdMsgSent))
+                pirStat = 'normal'
+                logger.info("The mdMsgSent variable was set to " + str(mdMsgSent))
 
             elif mdMsgSent == 1:
                 tFollow = time.time()
-                tKill = tStart + float(mdDelay)
-                logger.debug("                    tStart is: " + str(tStart))
-                logger.debug("Third line of ELIF.   tKill is " + str(tKill) + " and mdDelay is " + str(mdDelay))
-                tDiff = tKill - tFollow
-                logger.debug("                      tDiff is " + str(tDiff))
                 if tFollow > tKill:
                     mdMsgSent = 0
+                    logger.info("pirStat is " + pirStat + " and the " + str(mdDelay) + " sec timer expired. mdMsgSent was reset to " + str(mdMsgSent))
         else:
             if mdMsgSent == 1:
-                mdMsgSent = 0
-#                    pass
+                tFollow = time.time()
+                if tFollow > tKill:
+                    mdMsgSent = 0
+                    logger.debug("tFollow: " + str(tFollow) + ". tKill: " + str(tKill))
+                    logger.info("pirStat is " + pirStat + " and time is up, so the mdMsgSent variable was reset to " + str(mdMsgSent))
 
 #
 ## When something stops all this from being True, then we fall off the planet.

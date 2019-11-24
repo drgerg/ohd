@@ -24,7 +24,7 @@ logger.debug("Connecting to Retrieve Message")
 def main():
 #    global emAdd
     config = configparser.ConfigParser()
-    config.read_file(open('/home/greg/pipy/ohd/ohd.conf'))
+    config.read_file(open(ohdHome + '/ohd.conf'))
     login = config.get('CommandEmail', 'MyEmailAdd')
     pswd = config.get('CommandEmail', 'MyPasswd')
     x = int(config.get('CommandEmail', 'CmdEmNum'))
