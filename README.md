@@ -10,7 +10,7 @@ I've been using this now for a few years, and it does exactly what I need.
 
 In November of 2019 I added a PIR motion detector to my front porch.  It was natural to let **ohd** 
 handle the monitoring of its status.  When that motion is tripped, a notification is sent to the 
-configured emails/SMS gateways, and [Zoneminder](.https://zoneminder.com) is told to record video for a specified length of time.
+configured emails/SMS gateways, and [Zoneminder](https://zoneminder.com) is told to record video for a specified length of time.
 
 The Pi is a 3 Model B+, and the [schematic diagram](./GarageDoorMonitorRPi2019.pdf) details which pins do what.
 I also added a real-time clock module and an Uninterruptable Power Supply to keep it online and
