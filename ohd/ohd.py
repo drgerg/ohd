@@ -68,7 +68,7 @@ bpLimit = config.getint('Notify', 'NotifyBPLimit')
 bpLimNot = 0
 
 def main():
-    global DoorStat, bpStat, pill2kill, Qtest, openFirst, bpFirst, tt, QmsgRcvdSent, bpLimit, bpLimNot, mdMsgSent, tStart, pirStat, tFollow
+    global DoorStat, bpStat, pill2kill, Qtest, openFirst, bpFirst, tt, QmsgRcvdSent, bpLimit, bpLimNot, mdMsgSent, tStart, pirStat, tFollow, tKill
     logger.info(" NORMAL STARTUP AT THE TOP OF THE MAIN FUNCTION ")
     logger.info(" - - - - - - - - - - - - - - - - - - - - - - - - - - - - ")
     tt = 60
@@ -191,37 +191,31 @@ def main():
             bpLimNot = 1            # set to 1 to prevent repeating messages about the time of day.
 
 #
-## Check the PIR Motion Detector's status.
+## Check the PIR Motion Detector's status.  This function starts video recording, then sends notifications.  It also spawns
+## a threading.Timer() to run the motionDet function below which responds if the PIR is still triggered after the timer 
+## has run down.
 #
-        if pirStat == 'triggered':
+        if pirStat == 'triggered' and bpStat == 'Off' and (mdMsgSent == 0 or mdMsgSent == 2):
             mdDelay = config.get('MotionDetector', 'PirDelay')
-            logger.debug("Start of the first IF. mdMsgSent is: " + str(mdMsgSent) + " mdDelay is " + str(mdDelay))
             if mdMsgSent == 0:
-                tStart = time.time()                                              # Capture the time in tStart
-                tKill = tStart + float(mdDelay)
                 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 sock.connect(('192.168.1.22', 6802))
                 sock.send(b'6|on+20|25|PIR_Tripped|PIR|PIR \n7|on+20|25|PIR_Tripped|PIR|PIR \n8|on+40|25|PIR_Tripped|PIR|PIR \n9|on+40|25|PIR_Tripped|PIR|PIR')
-                ohdsendmail.msgS("PIR", "The Front Porch motion detector was tripped.")
+                ohdsendmail.msgS("PIR", "The Front Porch motion detector was tripped ")
                 received = str(sock.recv(1024), "utf-8")
                 logger.info("Motion detector was triggered.")
                 mdMsgSent = 1
                 pirStat = 'normal'
-                logger.info("The mdMsgSent variable was set to " + str(mdMsgSent))
-
-            elif mdMsgSent == 1:
-                tFollow = time.time()
-                if tFollow > tKill:
-                    mdMsgSent = 0
-                    logger.info("pirStat is " + pirStat + " and the " + str(mdDelay) + " sec timer expired. mdMsgSent was reset to " + str(mdMsgSent))
-        else:
-            if mdMsgSent == 1:
-                tFollow = time.time()
-                if tFollow > tKill:
-                    mdMsgSent = 0
-                    logger.debug("tFollow: " + str(tFollow) + ". tKill: " + str(tKill))
-                    logger.info("pirStat is " + pirStat + " and time is up, so the mdMsgSent variable was reset to " + str(mdMsgSent))
-
+                logger.debug("The mdMsgSent variable was set to " + str(mdMsgSent))
+                mdt = threading.Timer(int(mdDelay), motionDet)
+                mdt.start()
+                logger.debug("Started a threading.Timer")
+            if mdMsgSent == 2:
+                mdt = threading.Timer(int(mdDelay), motionDet)
+                mdt.start()
+                threadCount = threading.active_count()
+                logger.debug("threading.active_count is: " + str(threadCount))
+                mdMsgSent = 3
 #
 ## When something stops all this from being True, then we fall off the planet.
 ## I probably need do some exception catching stuff here . . .
@@ -229,10 +223,48 @@ def main():
     else:
         logger.info("Fell out of the Main() Function")
         log.flush()
-
-
+#
+##
+### AUXILLIARY FUNCTIONS
+##
+#
+## motionDet gets started as a thread when we have already sent one notification about 
+## the PIR motion detector being tripped.  The function is started by the threading module
+## as a thread, which means the main function can continue to loop while the timer is running down.
+## Once the timer runs down (defined by the PirDelay setting in ohd.conf), this function is run.
+#
+def motionDet():
+    global mdMsgSent, tStart, pirStat, tFollow, pill2kill, tKill
+    logger.debug("Top of threaded motionDet. " + str(threading.currentThread()))
+    if mdMsgSent == 3:
+        mdMsgSent = 1
+    if mdMsgSent == 2:
+        mdMsgSent == 1
+    if mdMsgSent == 1 and pirStat == 'triggered' and bpStat == 'Off':
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        sock.connect(('192.168.1.22', 6802))
+        sock.send(b'6|on+20|25|PIR_Tripped|PIR|PIR \n7|on+20|25|PIR_Tripped|PIR|PIR \n8|on+40|25|PIR_Tripped|PIR|PIR \n9|on+40|25|PIR_Tripped|PIR|PIR')
+        ohdsendmail.msgS("PIR", "The Front Porch motion detector is still tripped ")
+        received = str(sock.recv(1024), "utf-8")
+        logger.debug("Data received from ZM's sock is: " + received)
+        logger.info("Video recording was triggered.")
+        if pirStat == 'triggered' and bpStat == 'Off':
+            mdMsgSent = 2
+        if pirStat == 'normal' and bpStat == 'Off':
+            mdMsgSent = 0
+        logger.info("motionDet set mdMsgSent to: " + str(mdMsgSent))
+        threadCount = threading.active_count()
+        logger.info("threading.active_count is: " + str(threadCount))
+    else:
+        mdMsgSent = 0
+        pass
+#
+## getPins is the function that gets started as a thread to continuously check the status of our triggers.
+## This keeps the main function freed up and looping quickly, which enhances responsiveness.
+#
 def getPins(stop_event):
     global DoorStat, bpStat, pirStat, pill2kill, Qtest, openFirst, bpFirst, tt
+
     while not stop_event.wait(1):
         DoorStat = ohdpinchk.pinChk()
         bpStat = ohdpinchk.bpChk()
