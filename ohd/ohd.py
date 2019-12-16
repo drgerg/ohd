@@ -20,7 +20,6 @@ import socket
 import ohdpinchk
 import ohdsendmail
 import ohdreadmail
-# import ohdtimer -- pretty sure I won't be using this anymore.
 #
 ## Command line arguments parsing
 #
@@ -86,7 +85,6 @@ def main():
     logger.info("The getPins thread is " +  pcT)
 
     while True:
-#        logger.warning("1. bpStat: " + bpStat + ", ByPassFirst: " + str(bpFirst) + ", DoorStat: " + DoorStat + ", openFirst: " + str(bpFirst) + ", Qtest: " + Qtest)
 #
 ## ByPass Off and Door CLOSED is the normal state.  Nothing needs to be done.
 #
@@ -104,7 +102,6 @@ def main():
 
 
         elif bpStat == 'Off' and DoorStat == 'open' and openFirst == 1: # Subsequent times
-#            logger.debug("Test1: bPStat: " + bpStat + ". DoorStat: " + DoorStat + ": openFirst: " + str(openFirst) + "                 ")
             if time.time() - ttStart > tt and Qtest == "[]" and DoorStat == 'open':
                 emAdd = config.get('CommandEmail', 'InBoundEmail1')
                 Qtest, rmFrom, msgAuth = ohdreadmail.main()                     # Check for a Quiet message
@@ -200,10 +197,11 @@ def main():
             if mdMsgSent == 0:
                 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 sock.connect(('192.168.1.22', 6802))
-                sock.send(b'6|on+20|25|PIR_Tripped|PIR|PIR \n7|on+20|25|PIR_Tripped|PIR|PIR \n8|on+40|25|PIR_Tripped|PIR|PIR \n9|on+40|25|PIR_Tripped|PIR|PIR')
-                ohdsendmail.msgS("PIR", "The Front Porch motion detector was tripped ")
+                sock.send(b'6|on|25|PIR_Tripped|PIR|PIR \n7|on|25|PIR_Tripped|PIR|PIR \n8|on|25|PIR_Tripped|PIR|PIR \n9|on|25|PIR_Tripped|PIR|PIR')
+                smt = threading.Thread(target=ohdsendmail.msgS, args=("PIR", "The Front Porch motion detector was tripped "))
+                smt.start()
                 received = str(sock.recv(1024), "utf-8")
-                logger.info("Motion detector was triggered.")
+                logger.info("Motion detector was triggered. Command sent to Zoneminder.")
                 mdMsgSent = 1
                 pirStat = 'normal'
                 logger.debug("The mdMsgSent variable was set to " + str(mdMsgSent))
@@ -240,23 +238,15 @@ def motionDet():
         mdMsgSent = 1
     if mdMsgSent == 2:
         mdMsgSent == 1
-    if mdMsgSent == 1 and pirStat == 'triggered' and bpStat == 'Off':
+    if mdMsgSent == 1 and pirStat == 'normal' and bpStat == 'Off':
+        logger.info("pirStat is: " + pirStat)
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.connect(('192.168.1.22', 6802))
-        sock.send(b'6|on+20|25|PIR_Tripped|PIR|PIR \n7|on+20|25|PIR_Tripped|PIR|PIR \n8|on+40|25|PIR_Tripped|PIR|PIR \n9|on+40|25|PIR_Tripped|PIR|PIR')
-        ohdsendmail.msgS("PIR", "The Front Porch motion detector is still tripped ")
-        received = str(sock.recv(1024), "utf-8")
-        logger.debug("Data received from ZM's sock is: " + received)
-        logger.info("Video recording was triggered.")
-        if pirStat == 'triggered' and bpStat == 'Off':
-            mdMsgSent = 2
-        if pirStat == 'normal' and bpStat == 'Off':
-            mdMsgSent = 0
-        logger.info("motionDet set mdMsgSent to: " + str(mdMsgSent))
-        threadCount = threading.active_count()
-        logger.info("threading.active_count is: " + str(threadCount))
-    else:
+        sock.send(b'6|cancel|||| \n7|cancel|||| \n8|cancel|||| \n9|cancel||||')
         mdMsgSent = 0
+    else:
+        logger.info("pirStat is: " + pirStat)
+        mdMsgSent = 2
         pass
 #
 ## getPins is the function that gets started as a thread to continuously check the status of our triggers.
