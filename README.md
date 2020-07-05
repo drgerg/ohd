@@ -11,7 +11,7 @@ handle the monitoring of its status.  When that motion detector is tripped, **oh
 then sends notification to the configured emails/SMS gateways, and [Zoneminder](https://zoneminder.com) is told to
 record video for the configured length of time.
 
-The Pi is a 3 Model B+, and the [schematic diagram](./SupportingFiles/GarageDoorMonitorRPi2020.dwg) details which pins do what.
+The Pi is a 3 Model B+, and the [schematic diagram](./SupportingFiles/GarageDoorMonitorRPi2020.pdf) details which pins do what.
 I also added a real-time clock module and an Uninterruptable Power Supply to keep it online and
 on time.  The UPS is a home-brew job with a 12V sealed battery that powers a DROK 12V to 5V buck converter.
 That converter powers the Pi.  Works like a champ.
