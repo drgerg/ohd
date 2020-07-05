@@ -195,19 +195,24 @@ def main():
         if pirStat == 'triggered' and bpStat == 'Off' and (mdMsgSent == 0 or mdMsgSent == 2):
             mdDelay = config.get('MotionDetector', 'PirDelay')
             if mdMsgSent == 0:
+                logger.info("pirStat is: " + pirStat + ". Bypass is: " + bpStat + ".  mdMsgSent is: " + str(mdMsgSent) + ". Starting ZM.")
+                ohdpinchk.bellRing()
                 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 sock.connect(('192.168.1.22', 6802))
-                sock.send(b'6|on|25|PIR_Tripped|PIR|PIR \n7|on|25|PIR_Tripped|PIR|PIR \n8|on|25|PIR_Tripped|PIR|PIR \n9|on|25|PIR_Tripped|PIR|PIR')
+                sock.send(b'6|on|25|PIR_Tripped|PIR|PIR \n7|on|25|PIR_Tripped|PIR|PIR \n8|on|25|PIR_Tripped|PIR|PIR \n9|on|25|PIR_Tripped|PIR|PIR \n10|on|25|PIR_Tripped|PIR|PIR')
                 smt = threading.Thread(target=ohdsendmail.msgS, args=("PIR", "The Front Porch motion detector was tripped "))
                 smt.start()
+                threadCount = threading.active_count()
+                logger.debug("threading.active_count is: " + str(threadCount))
                 received = str(sock.recv(1024), "utf-8")
                 logger.info("Motion detector was triggered. Command sent to Zoneminder.")
+                logger.debug("Received from sock: \n" + received)
                 mdMsgSent = 1
                 pirStat = 'normal'
                 logger.debug("The mdMsgSent variable was set to " + str(mdMsgSent))
                 mdt = threading.Timer(int(mdDelay), motionDet)
                 mdt.start()
-                logger.debug("Started a threading.Timer")
+                logger.debug("Started a threading.Timer. When it ends, the motionDet function will run.")
             if mdMsgSent == 2:
                 mdt = threading.Timer(int(mdDelay), motionDet)
                 mdt.start()
@@ -237,15 +242,18 @@ def motionDet():
     if mdMsgSent == 3:
         mdMsgSent = 1
     if mdMsgSent == 2:
-        mdMsgSent == 1
+        mdMsgSent = 1
     if mdMsgSent == 1 and pirStat == 'normal' and bpStat == 'Off':
         logger.info("pirStat is: " + pirStat)
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.connect(('192.168.1.22', 6802))
-        sock.send(b'6|cancel|||| \n7|cancel|||| \n8|cancel|||| \n9|cancel||||')
+        sock.send(b'6|cancel|||| \n7|cancel|||| \n8|cancel|||| \n9|cancel|||| \n10|cancel||||')
+        received = str(sock.recv(1024), "utf-8")
+        logger.debug("Received from sock: \n" + received + "Also, mdMsgSent: " + str(mdMsgSent) + ", being set to 0.")
         mdMsgSent = 0
     else:
         logger.info("pirStat is: " + pirStat)
+        logger.debug("mdMsgSent: " + str(mdMsgSent) + ", setting to 2.")
         mdMsgSent = 2
         pass
 #

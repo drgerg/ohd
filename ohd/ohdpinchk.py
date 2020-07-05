@@ -21,6 +21,7 @@ GPIO.setmode(GPIO.BCM)
 GPIO.setup(12, GPIO.IN, pull_up_down = GPIO.PUD_UP)
 GPIO.setup(24, GPIO.IN, pull_up_down = GPIO.PUD_UP)
 GPIO.setup(27, GPIO.IN, pull_up_down = GPIO.PUD_UP)
+GPIO.setup(23, GPIO.OUT)
 GPIO.setup(25, GPIO.OUT)
 GPIO.setup(21, GPIO.OUT)
 logger.debug("All them little GPIOs are set up")
@@ -33,7 +34,9 @@ def main():
     time.sleep(1)
     logger.info("The door is " + pinChk() + ". Bypass is " + bpChk() +". Motion is " + pirChk())
     logger.debug("Finished the Main() function")
-
+    print(DoorStat)
+    print(bpStat)
+    return bpStat, DoorStat
 
 def pirChk():
     global pirStat
@@ -41,7 +44,7 @@ def pirChk():
         pirStat = 'normal'
     else:
         pirStat = 'triggered'
-    logger.debug("PIR: " + pirStat)
+#    logger.debug("PIR: " + pirStat)
     return pirStat
 
 def pinChk():
@@ -53,7 +56,7 @@ def pinChk():
     else:
         DoorStat = 'open'
         GPIO.output(25, GPIO.HIGH)
-    logger.debug("Door: " + DoorStat)
+#    logger.debug("Door: " + DoorStat)
     return DoorStat
 
 def bpChk():
@@ -65,9 +68,21 @@ def bpChk():
     else:
         bpStat = 'Off'
         GPIO.output(21, GPIO.LOW)
-    logger.debug("ByPass: " + bpStat)
+    # logger.info("ByPass: " + bpStat)
     return bpStat
 
+def bellRing():
+    GPIO.output(23, GPIO.HIGH)
+    time.sleep(.25)
+    GPIO.output(23, GPIO.LOW)
+    time.sleep(.5)
+    GPIO.output(23, GPIO.HIGH)
+    time.sleep(.25)
+    GPIO.output(23, GPIO.LOW)
+    time.sleep(.5)
+    GPIO.output(23, GPIO.HIGH)
+    time.sleep(.25)
+    GPIO.output(23, GPIO.LOW)
 
 def SignalHandler(signal, frame):
         logger.info("Cleaning up . . . \n = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =")
@@ -91,24 +106,24 @@ if __name__ == "__main__":
         #
         parserpc = argparse.ArgumentParser()
         parserpc.add_argument("-d", "--debug", help="Turn on debugging output to stderr", action="store_true")
+        parserpc.add_argument('-f', '--func', help="Call the specified function.", action="store")
         argspc = parserpc.parse_args()
         ohdHome = os.getcwd()
         if argspc.debug:
             logging.basicConfig(filename=ohdHome + '/ohd.log', format='[%(name)s]:%(levelname)s: %(message)s. - %(asctime)s', datefmt='%D %H:%M:%S', level=logging.DEBUG)
             logging.info("Debugging output enabled")
         else:
-            logging.basicConfig(filename=ohdHome + '/ohd.log', format='%(asctime)s - %(message)s in %(name)s.', datefmt='%a, %d %b %Y %H:%M:%S', level=logging.INFO)
+            logging.basicConfig(filename=ohdHome + '/ohd.log', format='%(asctime)s - %(message)s.', datefmt='%a, %d %b %Y %H:%M:%S', level=logging.INFO)
         #
         ## End Command line arguments parsing
 
         signal.signal(signal.SIGINT, SignalHandler)
         logger.debug("Top of try")
-        while True:
-            main()
-        pass
-        logger.info("Bottom of try")
+        main()
+        # print(bpStat)
+        logger.info("Bottom of try in ohdPinChk.py")
 
     except:
         pass
-        logger.info("That's all folks.  Goodbye")
+        logger.info("That's all folks.  Goodbye from ohdPinChk.py")
 
