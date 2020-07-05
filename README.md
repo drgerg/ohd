@@ -1,25 +1,24 @@
-## ohd - (OverHeadDoor) Garage Door Monitor
+# ohd - (OverHeadDoor) Garage Door Monitor
 
-#### Python3, Raspbian learning project
+Many years ago, I wanted a simple way to keep track of whether my garage door was open or closed.  
+I've been using this since 2015 and it does exactly what I need.
 
-**ohd** monitors specified GPIO pins on a Raspberry Pi and responds based on changes to
-the status of those pins.  It sends email (or SMS) messages to specific people.
+**'ohd'** monitors specified GPIO pins on a Raspberry Pi and responds based on changes to
+the status of those pins.  It sends email (or SMS) messages to numbers in its config file.
 
-I wanted a simple way to keep track of whether my garage door was open or closed.  
-I've been using this now for a few years, and it does exactly what I need.
+In November of 2019 I added a PIR motion detector to my front porch.  It was natural to let **ohd**
+handle the monitoring of its status.  When that motion detector is tripped, **ohd** rings my doorbell rings three times,
+then sends notification to the configured emails/SMS gateways, and [Zoneminder](https://zoneminder.com) is told to
+record video for the configured length of time.
 
-In November of 2019 I added a PIR motion detector to my front porch.  It was natural to let **ohd** 
-handle the monitoring of its status.  When that motion is tripped, a notification is sent to the 
-configured emails/SMS gateways, and [Zoneminder](https://zoneminder.com) is told to record video for a specified length of time.
-
-The Pi is a 3 Model B+, and the [schematic diagram](./GarageDoorMonitorRPi2019.pdf) details which pins do what.
+The Pi is a 3 Model B+, and the [schematic diagram](./SupportingFiles/GarageDoorMonitorRPi2020.dwg) details which pins do what.
 I also added a real-time clock module and an Uninterruptable Power Supply to keep it online and
-on time.  The UPS is a home-brew job with a 12V gel cell battery that powers an automotive USB
-12V to 5V converter.  That converter powers the Pi.  Works like a champ.
+on time.  The UPS is a home-brew job with a 12V sealed battery that powers a DROK 12V to 5V buck converter.
+That converter powers the Pi.  Works like a champ.
 
-I use a typical magnetic reed switch for the door, and I have a red LED that lights up when the door is open.
+I use a typical magnetic reed switch for the door.
 
-I re-used a square green pushbutton switch I salvaged off an old PC case for a ByPass button.  
+I re-used a square green pushbutton switch I salvaged off an old PC case as my ByPass button.  
 This button has a built-in LED which lights up when the ByPass is engaged.  The ByPass function
 allows me to keep the garage door open while I'm working in there without getting notified
 every minute.
@@ -30,11 +29,11 @@ changes.  Notifications can also be sent by SMS by using the SMS gateway address
 provider.  Mine is Verizon, and so **ohd** sends an email to 'mycellnumber@vzwpix.com'.  That gets
 translated to SMS and shows up on my phone like any other text.
 
-**ohd** also can receive instructions by email or SMS text.  There have been times when the door was opened by
+**ohd** also can receive instructions by email.  There have been times when the door was opened by
 someone who then failed to press the bypass button.  Like when we had flooring contractors working at
 our house.  We could not reach them, but I was able to send a "quiet" message to the Pi's Gmail address,
 and ohd retrieved that and stopped sending 'door open' notifications.  Very handy.  Currently this is the
 only command **ohd** acts on.
 
-I provided some [instructions](./SetupRaspianForOhd.md) to go from a brand new Pi to a functioning **ohd** system. 
+I provided some [instructions](./SetupRaspianForOhd.md) to go from a brand new Pi to a functioning **ohd** system.
 The normal caveats apply . . . your mileage may vary.
