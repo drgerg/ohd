@@ -1,7 +1,8 @@
 # ohd - (OverHeadDoor) Garage Door Monitor
 
-Many years ago, I wanted a simple way to keep track of whether my garage door was open or closed.  
-I've been using this since 2015 and it does exactly what I need.
+For decades, I wanted a simple way to keep track of whether my garage door was open or closed.  
+I started this project in 2015 and it does exactly what I need. The project eventually morphed into a component of
+what I have come to call my PiNet, a network of Raspberry Pi's that perform various useful functions around my property.
 
 **'ohd'** monitors specified GPIO pins on a Raspberry Pi and responds based on changes to
 the status of those pins.  It sends email (or SMS) messages to numbers in its config file.
