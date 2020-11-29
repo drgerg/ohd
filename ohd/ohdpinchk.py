@@ -1,13 +1,9 @@
 #!/usr/bin/env python3
 
-""" ohdpinchk.py - (OverHead Door) Check and return the status of the specified GPIO pin.
-    2019 - Gregory Allen Sanders"""
+# ohdpinchk.py - (OverHead Door) Check and return the status of the specified GPIO pin.
+#    2019,2020 - Gregory Allen Sanders
 
-import os
-import sys
-import logging
-import time
-import signal
+import os,sys,logging,time,signal,ohdSoftBP
 import RPi.GPIO as GPIO
 
 logger = logging.getLogger(__name__)
@@ -29,18 +25,19 @@ logger.debug("All them little GPIOs are set up")
 ## End GPIO setup
 
 def main():
-
     logger.debug("Started the Main() function")
     time.sleep(1)
-    logger.info("The door is " + pinChk() + ". Bypass is " + bpChk() +". Motion is " + pirChk())
+    logger.info("The door is " + pinChk() + ". Bypass is " + bpChk() +". Motion is " + pirChk() + ". " + cpuTemp())
     logger.debug("Finished the Main() function")
-    print(DoorStat)
-    print(bpStat)
-    return bpStat, DoorStat
+    print(DoorStat)         # These print lines are used by Brilliant zTest.py to bring 
+    print(bpStat)           # these values to Mother.
+    print(cpuT)             # Don't comment them out thinking they are abandoned test lines.
+    print(pirStat)
+    return bpStat, DoorStat, cpuT
 
 def pirChk():
     global pirStat
-    if(GPIO.input(27) == False):
+    if GPIO.input(27) == False:
         pirStat = 'normal'
     else:
         pirStat = 'triggered'
@@ -50,7 +47,7 @@ def pirChk():
 def pinChk():
     global DoorStat
 #    logger.debug("At top of pinChk()")
-    if(GPIO.input(24) == False):
+    if GPIO.input(24) == False:
         DoorStat = 'closed'
         GPIO.output(25, GPIO.LOW)
     else:
@@ -59,33 +56,97 @@ def pinChk():
 #    logger.debug("Door: " + DoorStat)
     return DoorStat
 
-def bpChk():
+
+
+def bpChk(bpStatv):
     global bpStat
-#    logger.debug("At top of bpChk()")
-    if(GPIO.input(12) == False):
+    bpStat = bpStatv
+    justOn = 0
+    # logger.info("At top of bpChk()")
+    SBPStat = ohdSoftBP.SBPCheck()
+    # logger.info('bpStat: ' + bpStat + ', SBPStat: ' + SBPStat)
+#
+    if SBPStat == 'start':                                    ## Soft Bypass status START. Established by ohdSoftBP.blinkOn()
+        bpStat = 'On'
+
+    if SBPStat == 'stop':                                     ## Soft Bypass status STOP. Established by ohdSoftBP.blinkOff()
+        bpStat = 'Off'
+
+    if SBPStat == 'stop' and GPIO.input(12) == False:         ## Button pushed in (ByPass is On). This reports as False.
         bpStat = 'On'
         GPIO.output(21, GPIO.HIGH)
-    else:
-        bpStat = 'Off'
+
+    if SBPStat == 'stop' and GPIO.input(12) == True:          ## Button popped out (ByPass is Off). This reports as True.
         GPIO.output(21, GPIO.LOW)
-    # logger.info("ByPass: " + bpStat)
+        bpStat = 'Off'
+
+    if SBPStat == 'override' and GPIO.input(12) == False:
+        GPIO.output(21, GPIO.LOW)
+        ohdSoftBP.override()                                  ## Sets SBPStat to 'stop' and turns off blinking LED
+        bpStat = 'Off'
+
+
+    # if bpStat == 'Off':
+    #     if SBPStat == 'start':                                    ## Soft Bypass status START. Established by ohdSoftBP.blinkOn()
+    #         bpStat = 'On'
+    #         justOn = 1
+    #         pass
+    #     else:
+    #         if GPIO.input(12) == False:                           ## Button pushed in (ByPass is On). This reports as False.
+    #             bpStat = 'On'
+    #             GPIO.output(21, GPIO.HIGH)
+    #             justOn = 1
+    #         if GPIO.input(12) == True:
+    #             GPIO.output(21, GPIO.LOW)
+    #             bpStat = 'Off'
+
+    # if bpStat == 'On' and justOn == 0:
+    #     if SBPStat == 'stop':                                     ## Soft Bypass status STOP. Established by ohdSoftBP.blinkOff()
+    #         bpStat = 'Off'
+    #     else:
+    #         if SBPStat == 'start':
+    #             pass
+    #         else:
+    #             if GPIO.input(12) == True:                        ## Button popped out (ByPass is Off). This reports as True.
+    #                 GPIO.output(21, GPIO.LOW)
+    #                 bpStat = 'Off'
+
     return bpStat
 
+
+
+
 def bellRing():
+    # logger.info("Ringing the doorbell.")
     GPIO.output(23, GPIO.HIGH)
-    time.sleep(.25)
+    time.sleep(.1)
     GPIO.output(23, GPIO.LOW)
     time.sleep(.5)
     GPIO.output(23, GPIO.HIGH)
-    time.sleep(.25)
+    time.sleep(.1)
     GPIO.output(23, GPIO.LOW)
     time.sleep(.5)
     GPIO.output(23, GPIO.HIGH)
-    time.sleep(.25)
+    time.sleep(.1)
     GPIO.output(23, GPIO.LOW)
+    rangBell = "Rang the Doorbell."
+    return rangBell
+
+#
+## Grab the CPU temperature while you're at it.
+#
+def cpuTemp():
+    global cpuT
+# Return CPU temperature as a character string
+    ct = os.popen('vcgencmd measure_temp').readline()
+    cpuRtn = ct.replace("temp=","").replace("'C\n","")
+    temp1=float(cpuRtn)
+    temp2= '{:.2f}'.format(float(9/5 * temp1 + 32.00))
+    cpuT = "CPU: " + str(temp1) + "C" + " (" + str(temp2) + "F)"
+    return cpuT
 
 def SignalHandler(signal, frame):
-        logger.info("Cleaning up . . . \n = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =")
+        logger.info(" = = = = = = = = = = = = = = Cleaning up = = = = = = = = = = = = = = = = = = ")
         GPIO.cleanup()
         logger.debug("Finished GPIO.cleanup() in SignalHandler")
         logger.info("Shutting down gracefully")
@@ -119,7 +180,13 @@ if __name__ == "__main__":
 
         signal.signal(signal.SIGINT, SignalHandler)
         logger.debug("Top of try")
-        main()
+        if argspc.func:
+            Pfunc = str(argspc.func + '()')
+            print(Pfunc)
+            Pfunc
+        else:
+            import ohdSoftBP
+            bpChk()
         # print(bpStat)
         logger.info("Bottom of try in ohdPinChk.py")
 

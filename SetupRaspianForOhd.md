@@ -181,7 +181,17 @@ This is a new step brought on by the need to use msmtp in Raspbian Buster.  If y
 
 CTRL-X  Y  Enter
 
-#### 13. Set ohd to run on boot
+#### 13. Put ohd in the ohd folder 
+
+In your user's folder in Raspian (if you're not sure you're there, do <code>cd ~</code> to be sure), create the ohd folder.
+
+```$ mkdir ohd```
+
+Acquire the ohd folder from Github using your favorite method.
+Paste the contents of your downloaded ohd folder into the new empty ohd folder in your user's folder.
+Edit ohd.conf to configure the system for your particular situation.
+
+#### 14. Set ohd to run on boot
 
 We're using the "systemd" method for running things as a service.  I don't understand exactly how it works, I just know it does.  That's enough for me at this point.  It's not that hard.  Don't be afraid.
 

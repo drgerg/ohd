@@ -50,12 +50,11 @@ if argsohd.debug:
     logging.basicConfig(filename=ohdHome + '/ohd.log', format='[%(name)s]:%(levelname)s: %(message)s. - %(asctime)s', datefmt='%D %H:%M:%S', level=logging.DEBUG)
     logging.info("Debugging output enabled")
 else:
-    logging.basicConfig(filename=ohdHome + '/ohd.log', format='%(asctime)s - %(message)s : %(name)s.', datefmt='%a, %d %b %Y %H:%M:%S', level=logging.INFO)
+    logging.basicConfig(filename=ohdHome + '/ohd.log', format='%(asctime)s - %(message)s', datefmt='%a, %d %b %Y %H:%M:%S', level=logging.INFO)
 #
 ## End Command line arguments parsing
 
-logger.info(" - - - - - - - - - - - - - - - - - - - - - - - - - - - - ")
-logger.info("  INITIAL CONFIGURATION COMPLETE  ")
+logger.info(" - - - - - - - ohd.py INITIAL CONFIGURATION COMPLETE - - - - - - - - - - - - - - ")
 logger.info("'HOME' path is: " + ohdHome)
 global DoorStat, bpStat, pirStat, pill2kill, Qtest, openFirst, bpFirst, tt, QmsgRcvdSent, bpLimit, bpLimNot
 DoorStat = "closed"
@@ -68,15 +67,15 @@ bpLimNot = 0
 
 def main():
     global DoorStat, bpStat, pill2kill, Qtest, openFirst, bpFirst, tt, QmsgRcvdSent, bpLimit, bpLimNot, mdMsgSent, tStart, pirStat, tFollow, tKill
-    logger.info(" NORMAL STARTUP AT THE TOP OF THE MAIN FUNCTION ")
-    logger.info(" - - - - - - - - - - - - - - - - - - - - - - - - - - - - ")
+    logger.info(" - - - - - - ohd.py main() function NORMAL STARTUP  - - - - - - - - - - - - - ")
     tt = 60
     bpFirst = 0
     openFirst = 0
     mdMsgSent = 0
     ohdsendmail.msgS("GarMon Status Change", "Garage Door Monitor started normally at ")
     pill2kill = threading.Event()
-    pt = threading.Thread(target=getPins, args=(pill2kill,))
+    bpStatv = bpStat
+    pt = threading.Thread(target=getPins, args=(pill2kill,bpStatv,))
     pt.start()
     if "Thread-1" in str(threading.enumerate()):
         pcT = "running"
@@ -96,7 +95,8 @@ def main():
             openFirst = 1
             bpFirst = 0
             if Qtest != "Quiet":
-                ohdsendmail.main()
+                bpStatv = bpStat
+                ohdsendmail.main(bpStatv)
             logger.debug("Starting the timer.")
             ttStart = time.time()                                              # Capture the time in ttStart
 
@@ -107,8 +107,9 @@ def main():
                 Qtest, rmFrom, msgAuth = ohdreadmail.main()                     # Check for a Quiet message
                 logger.info("ohdreadmail.main() returned Auth= " +msgAuth + "; "  + Qtest + ", From: " + rmFrom)
                 if Qtest != 'Quiet':
-                   logger.info("A minute has gone by.  Restarting time monitoring. Qtest = " + Qtest + ". Door is " + DoorStat) 
-                   ohdsendmail.main()
+                   logger.info("A minute has gone by.  Restarting time monitoring. Qtest = " + Qtest + ". Door is " + DoorStat)
+                   bpStatv = bpStat
+                   ohdsendmail.main(bpStatv)
                    Qtest = "[]"
                 ttStart = time.time()
             else:
@@ -121,7 +122,8 @@ def main():
         if bpStat == 'On' and DoorStat == 'open':
             if bpFirst == 0:
                 logger.info("Door OPEN and ByPass ON" + ". bpFirst=" + str(bpFirst))
-                ohdsendmail.main()
+                bpStatv = bpStat
+                ohdsendmail.main(bpStatv)
                 bpFirst = 2         # '2' means the door is OPEN and ByPass is ON
                 Qtest = "[]"
                 QmsgRcvdSent = 0
@@ -149,7 +151,8 @@ def main():
             bpFirst = 1             # Set bpFirst after First ByPass On msg.  '1' means ByPass is ON and door is CLOSED
             Qtest = "[]"            # Reset Qtest
             QmsgRcvdSent = 0        # Reset Qmsg
-            ohdsendmail.main()
+            bpStatv = bpStatv
+            ohdsendmail.main(bpStatv)
             logger.info("bpFirst set to " + str(bpFirst))
             if argsohd.debug:
                 time.sleep(1)
@@ -159,7 +162,8 @@ def main():
 #
         elif bpStat == 'Off' and DoorStat == 'closed' and bpFirst == 1:
             logger.info("ByPass was turned OFF")
-            ohdsendmail.main()
+            bpStatv = bpStat
+            ohdsendmail.main(bpStatv)
             bpFirst = 0             # Reset bpFirst
             Qtest = "[]"            # Reset Qtest
             QmsgRcvdSent = 0        # Reset Qmsg
@@ -172,7 +176,8 @@ def main():
 #
         if bpStat == 'Off' and DoorStat == 'closed' and openFirst == 1:
             logger.info("Door Closed and ByPass OFF")
-            ohdsendmail.main()
+            bpStatv = bpStat
+            ohdsendmail.main(bpStatv)
             if argsohd.debug:
                 time.sleep(1)
             openFirst = 0
@@ -196,23 +201,33 @@ def main():
             mdDelay = config.get('MotionDetector', 'PirDelay')
             if mdMsgSent == 0:
                 logger.info("pirStat is: " + pirStat + ". Bypass is: " + bpStat + ".  mdMsgSent is: " + str(mdMsgSent) + ". Starting ZM.")
-                ohdpinchk.bellRing()
+                rangBell = ohdpinchk.bellRing()
+                logger.info(rangBell)
                 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                sock.connect(('192.168.1.22', 6802))
-                sock.send(b'6|on|25|PIR_Tripped|PIR|PIR \n7|on|25|PIR_Tripped|PIR|PIR \n8|on|25|PIR_Tripped|PIR|PIR \n9|on|25|PIR_Tripped|PIR|PIR \n10|on|25|PIR_Tripped|PIR|PIR')
-                smt = threading.Thread(target=ohdsendmail.msgS, args=("PIR", "The Front Porch motion detector was tripped "))
-                smt.start()
-                threadCount = threading.active_count()
-                logger.debug("threading.active_count is: " + str(threadCount))
-                received = str(sock.recv(1024), "utf-8")
-                logger.info("Motion detector was triggered. Command sent to Zoneminder.")
-                logger.debug("Received from sock: \n" + received)
-                mdMsgSent = 1
-                pirStat = 'normal'
-                logger.debug("The mdMsgSent variable was set to " + str(mdMsgSent))
-                mdt = threading.Timer(int(mdDelay), motionDet)
-                mdt.start()
-                logger.debug("Started a threading.Timer. When it ends, the motionDet function will run.")
+                try:
+                    sock.connect(('192.168.1.22', 6802))
+                    sock.send(b'6|on|25|PIR_Tripped|PIR|PIR \n7|on|25|PIR_Tripped|PIR|PIR \n8|on|25|PIR_Tripped|PIR|PIR \n9|on|25|PIR_Tripped|PIR|PIR \n10|on|25|PIR_Tripped|PIR|PIR')
+                    smt = threading.Thread(target=ohdsendmail.msgS, args=("PIR", "The Front Porch motion detector was tripped "))
+                    smt.start()
+                    threadCount = threading.active_count()
+                    logger.debug("threading.active_count is: " + str(threadCount))
+                    received = str(sock.recv(1024), "utf-8")
+                    logger.info("Motion detector was triggered. Command sent to Zoneminder.")
+                    logger.debug("Received from sock: \n" + received)
+                    mdMsgSent = 1
+                    pirStat = 'normal'
+                    logger.debug("The mdMsgSent variable was set to " + str(mdMsgSent))
+                    mdt = threading.Timer(int(mdDelay), motionDet)
+                    mdt.start()
+                    logger.debug("Started a threading.Timer. When it ends, the motionDet function will run.")
+                except OSError as myBad:
+                    logger.info('The Zoneminder computer is non-responsive.  Setting the mdMsgSent variable to 0 anyway.')
+                    mdMsgSent = 1
+                    pirStat = 'normal'
+                    logger.debug("Despite OSError, the mdMsgSent variable was set to " + str(mdMsgSent))
+                    mdt = threading.Timer(int(mdDelay), motionDet)
+                    mdt.start()
+                    logger.debug("Started a threading.Timer. When it ends, the motionDet function will run.")
             if mdMsgSent == 2:
                 mdt = threading.Timer(int(mdDelay), motionDet)
                 mdt.start()
@@ -244,13 +259,17 @@ def motionDet():
     if mdMsgSent == 2:
         mdMsgSent = 1
     if mdMsgSent == 1 and pirStat == 'normal' and bpStat == 'Off':
-        logger.info("pirStat is: " + pirStat)
+        logger.info("pirStat is: " + pirStat + ', and mdMsgSent is: ' + str(mdMsgSent) + '. (should be 1)')
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        sock.connect(('192.168.1.22', 6802))
-        sock.send(b'6|cancel|||| \n7|cancel|||| \n8|cancel|||| \n9|cancel|||| \n10|cancel||||')
-        received = str(sock.recv(1024), "utf-8")
-        logger.debug("Received from sock: \n" + received + "Also, mdMsgSent: " + str(mdMsgSent) + ", being set to 0.")
-        mdMsgSent = 0
+        try:
+            sock.connect(('192.168.1.22', 6802))
+            sock.send(b'6|cancel|||| \n7|cancel|||| \n8|cancel|||| \n9|cancel|||| \n10|cancel||||')
+            received = str(sock.recv(1024), "utf-8")
+            logger.debug("Received from sock: \n" + received + "Also, mdMsgSent: " + str(mdMsgSent) + ", being set to 0.")
+            mdMsgSent = 0
+        except OSError as myBad:
+            logger.info('The Zoneminder computer is non-responsive.  Setting the mdMsgSent variable to 0 anyway.')
+            mdMsgSent = 0
     else:
         logger.info("pirStat is: " + pirStat)
         logger.debug("mdMsgSent: " + str(mdMsgSent) + ", setting to 2.")
@@ -260,13 +279,15 @@ def motionDet():
 ## getPins is the function that gets started as a thread to continuously check the status of our triggers.
 ## This keeps the main function freed up and looping quickly, which enhances responsiveness.
 #
-def getPins(stop_event):
+def getPins(stop_event,bpStatv):
     global DoorStat, bpStat, pirStat, pill2kill, Qtest, openFirst, bpFirst, tt
 
     while not stop_event.wait(1):
         DoorStat = ohdpinchk.pinChk()
-        bpStat = ohdpinchk.bpChk()
+        bpStatv = bpStat
+        bpStat = ohdpinchk.bpChk(bpStatv)
         pirStat = ohdpinchk.pirChk()
+        # logger.info('From ohd.py, bpStat: ' + bpStat)
     else:
         logger.info("getPins dropped out")
         pass
@@ -275,15 +296,14 @@ def SignalHandler(signal, frame):
         global pill2kill
         print("SignalHandler invoked")
         pill2kill.set()
-        logger.info(" - - - - - - - - - - - - - - - - - - - - - ")
-        logger.info("Cleaning up")
+        logger.info(" - - - - - - - - - Cleaning up - - - - - - - - - - - - ")
         GPIO.cleanup()
         logger.debug("Finished GPIO.cleanup() in SignalHandler")
-        logger.info("Shutting down gracefully")
+        logger.info("        Shutting down gracefully       ")
         ohdsendmail.msgS("ohd Status Change", "Shutdown Initiated")
         logger.debug("Sent 'Shutdown Now' message")
         logger.debug("Wrote to log in SignalHandler")
-        logger.info("Finished SignalHandler")
+        # logger.info("Finished SignalHandler")
 #        logger.flush()
 #        logger.close()
         sys.exit(0)

@@ -1,0 +1,14 @@
+[Unit]
+Description=Garage door monitor Soft Bypass. ohdBlinker.service
+After=network.target
+
+[Service]
+ExecStart=/home/greg/ohd/blinker.py
+WorkingDirectory=/home/greg/ohd/
+StandardOutput=syslog
+StandardError=syslog
+User=greg
+ExecStop = /bin/kill -2 $MAINPID
+
+[Install]
+WantedBy=multi-user.target

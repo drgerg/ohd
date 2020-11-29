@@ -1,0 +1,17 @@
+
+[Unit]
+Description=ohd Socket Host - socketHost.service
+After=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /home/greg/ohd/socketHost.py
+WorkingDirectory=/home/greg/ohd/
+StandardOutput=/home/greg/ohd/blink.log
+StandardError=syslog
+User=greg
+Group=pi
+ExecStop = /bin/kill -2 $MAINPID
+
+[Install]
+WantedBy=multi-user.target

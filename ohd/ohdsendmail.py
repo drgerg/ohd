@@ -24,9 +24,9 @@ logger = logging.getLogger(__name__)
 logger.debug("Sending Message")
 
 
-def main():
+def main(bpStatv):
     logger.debug("Started the main() function")
-    tMsg = "The door is " + ohdpinchk.pinChk() + " and ByPass is " + ohdpinchk.bpChk()
+    tMsg = "The door is " + ohdpinchk.pinChk() + " and ByPass is " + ohdpinchk.bpChk(bpStatv)
     tSub = "Door Status Change"
     msgS(tSub, tMsg)
     logger.debug("Finished the Main() function")
