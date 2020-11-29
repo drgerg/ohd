@@ -5,11 +5,11 @@ After=network-online.target
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/python3 /home/greg/ohd/socketHost.py
-WorkingDirectory=/home/greg/ohd/
-StandardOutput=/home/greg/ohd/blink.log
+ExecStart=/usr/bin/python3 /home/Your_User/ohd/socketHost.py
+WorkingDirectory=/home/Your_User/ohd/
+StandardOutput=/home/Your_User/ohd/blink.log
 StandardError=syslog
-User=greg
+User=Your_User
 Group=pi
 ExecStop = /bin/kill -2 $MAINPID
 
