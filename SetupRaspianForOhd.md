@@ -45,9 +45,9 @@ For security reasons it's probably a good idea to change the password, but you m
 username as well. There are a couple of different ways to change the default username but I found the 
 following method the easiest. 
 
-In order to change the username 'pi' we will have to log in a the root user since it's not possible 
+In order to change the username 'pi' we will have to log in as the root user since it's not possible 
 to rename an account while your logged into it. To log in as root user first we have to enable it, 
-to do so type the following command whilst logged in as the default pi user:
+to do so type the following command while logged in as the default pi user:
 
 ```$ sudo passwd root```
 
