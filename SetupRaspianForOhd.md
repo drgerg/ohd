@@ -125,6 +125,8 @@ There is only one user in my setup, so I chose the system-wide configuration fil
 
 Then paste in this block of stuff and edit the personal items to reflect your current reality.
 
+NOTE: Go to your gmail account and enable 2FA if you haven't already.  Then create an App Password to use here.
+
         # Set default values for all following accounts.
         defaults
         auth           on
