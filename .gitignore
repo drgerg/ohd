@@ -1,3 +1,4 @@
 .vscode
 ohdgithub.code-workspace
-*/__pychche__
+*/__pycache__
+
