@@ -200,7 +200,11 @@ Edit ohd.conf to configure the system for your particular situation.
 
 We're using the "systemd" method for running things as a service. It's not that hard.  Don't be afraid.
 
-We need to create a file in the /etc/systemd/system/ folder called "ohd.service".
+We need to create three files in the /etc/systemd/system/ folder.
+
+There is a folder in the repo called **_lib_systemd_system_Files**.  That folder contains templates for the three **.service** files you need to create.
+
+One is called "ohd.service", and I'm going to walk you through that one as an example.
 
 ```$ sudo nano /etc/systemd/system/ohd.service```
 
