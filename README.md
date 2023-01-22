@@ -16,7 +16,7 @@ handle the monitoring of its status.  When that motion detector is tripped, **oh
 then sends notification to the configured emails/SMS gateways, and **Agent DVR** is told to
 record video for the configured length of time.
 
-In 2022 I replaced **Zoneminder** with another open source program called **Agent DVR**.  It significantly simplifies things.
+In 2022 I replaced **Zoneminder** with another open source program called [**Agent DVR**](https://www.ispyconnect.com/download.aspx).  It significantly simplifies things.
 
 ### Simple hardware requirements
 
