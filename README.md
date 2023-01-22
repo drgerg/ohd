@@ -13,7 +13,7 @@ the status of those pins.  It sends email (or SMS) messages to numbers in its co
 
 In November of 2019 I added a PIR motion detector to my front porch.  It was natural to let **ohd**
 handle the monitoring of its status.  When that motion detector is tripped, **ohd** rings my doorbell rings three times,
-then sends notification to the configured emails/SMS gateways, and **Agent DVR** is told to
+then sends notification to the configured emails/SMS gateways, and **Agent DVR** (used to be Zoneminder) is told to
 record video for the configured length of time.
 
 In 2022 I replaced **Zoneminder** with another open source program called [**Agent DVR**](https://www.ispyconnect.com/download.aspx).  It significantly simplifies things.
