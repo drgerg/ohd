@@ -2,7 +2,7 @@
 
 For decades, I wanted a simple way to keep track of whether my garage door was open or closed.  
 I started this project in 2015 and it does exactly what I need. The project eventually morphed into a component of
-what I have come to call my PiNet, a network of Raspberry Pi's that perform various useful functions around my property.
+what I have come to call my [PiNet](https://github.com/casspop/PiNet), a network of Raspberry Pi's that perform various useful functions around my property.
 
 ### Primarily monitors and notifies me of the open/close status of the Garage Door.
 

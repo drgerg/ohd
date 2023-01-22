@@ -189,7 +189,8 @@ In your user's folder in Raspian (if you're not sure you're there, do <code>cd ~
 
 ```$ mkdir ohd```
 
-Acquire the ohd folder from Github using your favorite method.
+Acquire the ohd code files (from the folder with the largest version number) from Github using your favorite method.
+As of this update, the folder is named **v2.x.x_code**.
 Paste the contents of your downloaded ohd folder into the new empty ohd folder in your user's folder.
 Edit ohd.conf to configure the system for your particular situation.
 
