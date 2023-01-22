@@ -194,6 +194,8 @@ As of this update, the folder is named **v2.x.x_code**.
 
 Paste the contents of your downloaded ohd folder into the new empty ohd folder in your user's folder.
 
+Rename **ohd_example.conf** to **ohd.conf**.
+
 Edit ohd.conf to configure the system for your particular situation.
 
 #### 14. Set ohd to run on boot
