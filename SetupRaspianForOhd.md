@@ -191,12 +191,14 @@ In your user's folder in Raspian (if you're not sure you're there, do <code>cd ~
 
 Acquire the ohd code files (from the folder with the largest version number) from Github using your favorite method.
 As of this update, the folder is named **v2.x.x_code**.
+
 Paste the contents of your downloaded ohd folder into the new empty ohd folder in your user's folder.
+
 Edit ohd.conf to configure the system for your particular situation.
 
 #### 14. Set ohd to run on boot
 
-We're using the "systemd" method for running things as a service.  I don't understand exactly how it works, I just know it does.  That's enough for me at this point.  It's not that hard.  Don't be afraid.
+We're using the "systemd" method for running things as a service. It's not that hard.  Don't be afraid.
 
 We need to create a file in the /etc/systemd/system/ folder called "ohd.service".
 
