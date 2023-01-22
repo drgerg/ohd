@@ -3,7 +3,15 @@
 """ ohdsendmail.py - (OverHead Door) Email pre-configured messages.
     2019 - Gregory Allen Sanders"""
 
-import os,socket,sys,configparser,logging,time,signal,ohdpinchk,pickle
+import os
+import socket
+import sys
+import configparser
+import logging
+import time
+import signal
+import ohdpinchk
+import pickle
 #
 ## ConfigParser init area.  Get some info out of working.conf.
 #

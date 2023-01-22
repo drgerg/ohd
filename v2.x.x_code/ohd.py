@@ -5,7 +5,7 @@ My first project with a Raspberry Pi was intended to monitor a reed switch on my
 and send me a text or email if it opened. That's not all it did, of course, but that's the gist.
 It was finished in December of 2015, and ran flawlessly for three years.  The code was kludgy at best,
 so I am re-writing it in an attempt to bring it more in line with good coding practices.  We shall see.
-I am an amateur.  Learning as I go, I started on this in January, 2019.  Finished it on 01/26/19."""
+I am still an amateur.  Learning as I go, I started on this in January, 2019.  Finished it on 01/26/19."""
 
 import os
 import sys
@@ -16,7 +16,7 @@ import time
 import signal
 import threading
 import RPi.GPIO as GPIO
-import socket
+# import socket
 import requests
 import ohdpinchk
 import ohdsendmail
@@ -31,7 +31,7 @@ parserohd.add_argument("-dd", "--ddebug", help="Turn on DEEP debugging output to
 ## Get the HOME environment variable
 #
 ohdHome = os.getcwd()
-
+version = "v2.1.1"
 #
 ## ConfigParser init area.  Get some info out of working.conf.
 #
@@ -68,12 +68,12 @@ bpLimNot = 0
 
 def main():
     global DoorStat, bpStat, pill2kill, Qtest, openFirst, bpFirst, tt, QmsgRcvdSent, bpLimit, bpLimNot, mdMsgSent, tStart, pirStat, tFollow, tKill
-    logger.info(" - - - - - - ohd.py main() function NORMAL STARTUP  - - - - - - - - - - - - - ")
+    logger.info(" - - - - - - ohd.py " + version + " main() function NORMAL STARTUP  - - - - - - - - - - - - - ")
     tt = 60
     bpFirst = 0
     openFirst = 0
     mdMsgSent = 0
-    ohdsendmail.msgS("GarMon Status Change", "Garage Door Monitor started normally at ")
+    ohdsendmail.msgS("ohd " + version + " Status Change", "Garage Door Monitor started normally at ")
     pill2kill = threading.Event()
     bpStatv = bpStat
     pt = threading.Thread(target=getPins, args=(pill2kill,bpStatv,))
