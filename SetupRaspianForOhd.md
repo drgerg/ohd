@@ -253,6 +253,8 @@ At this point ohd.py should be run when your Pi reboots.  You can also control i
 
 ```$ sudo service ohd status```
 
+You'll need to follow the same process for the other files you found in the **_lib_systemd_system_Files** folder.
+
 You can always learn more about commands by typing something like:
 ```$ man service```
 
