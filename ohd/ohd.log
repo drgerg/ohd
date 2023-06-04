@@ -1,0 +1,23 @@
+Mon, 11 Feb 2019 21:06:35 -  - - - - - - - - - - - - - - - - - - - - - - - - - - - -  : __main__.
+Mon, 11 Feb 2019 21:06:35 -   INITIAL CONFIGURATION COMPLETE   : __main__.
+Mon, 11 Feb 2019 21:06:35 - 'HOME' path is: /home/greg/pipy/ohd : __main__.
+Mon, 11 Feb 2019 21:06:35 -  Top of try : __main__.
+Mon, 11 Feb 2019 21:06:35 -  NORMAL STARTUP AT THE TOP OF THE MAIN FUNCTION  : __main__.
+Mon, 11 Feb 2019 21:06:35 -  - - - - - - - - - - - - - - - - - - - - - - - - - - - -  : __main__.
+Mon, 11 Feb 2019 21:06:41 - 'Garage Door Monitor started normally at ' Message Sent : ohdsendmail.
+Mon, 11 Feb 2019 21:06:41 - The getPins thread is running : __main__.
+Tue, 12 Feb 2019 06:31:08 - ByPass is OFF and door is OPEN : __main__.
+Tue, 12 Feb 2019 06:31:14 - 'The door is open and ByPass is Off' Message Sent : ohdsendmail.
+Tue, 12 Feb 2019 06:31:38 - Door Closed and ByPass OFF : __main__.
+Tue, 12 Feb 2019 06:31:44 - 'The door is closed and ByPass is Off' Message Sent : ohdsendmail.
+Tue, 12 Feb 2019 06:31:44 - bpFirst set to 0 : __main__.
+Tue, 12 Feb 2019 17:16:14 - ByPass is OFF and door is OPEN : __main__.
+Tue, 12 Feb 2019 17:16:20 - 'The door is open and ByPass is Off' Message Sent : ohdsendmail.
+Tue, 12 Feb 2019 17:17:21 - Logging out : ohdreadmail.
+Tue, 12 Feb 2019 17:17:21 - No Quiet msg.  Returning: [] and Nobody and None : ohdreadmail.
+Tue, 12 Feb 2019 17:17:21 - ohdreadmail.main() returned Auth= None; [], From: Nobody : __main__.
+Tue, 12 Feb 2019 17:17:21 - A minute has gone by.  Restarting time monitoring. Qtest = []. Door is open : __main__.
+Tue, 12 Feb 2019 17:17:27 - 'The door is open and ByPass is Off' Message Sent : ohdsendmail.
+Tue, 12 Feb 2019 17:17:49 - Door Closed and ByPass OFF : __main__.
+Tue, 12 Feb 2019 17:17:54 - 'The door is closed and ByPass is Off' Message Sent : ohdsendmail.
+Tue, 12 Feb 2019 17:17:54 - bpFirst set to 0 : __main__.
