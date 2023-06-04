@@ -5,7 +5,10 @@ My first project with a Raspberry Pi was intended to monitor a reed switch on my
 and send me a text or email if it opened. That's not all it did, of course, but that's the gist.
 It was finished in December of 2015, and ran flawlessly for three years.  The code was kludgy at best,
 so I am re-writing it in an attempt to bring it more in line with good coding practices.  We shall see.
-I am still an amateur.  Learning as I go, I started on this in January, 2019.  Finished it on 01/26/19."""
+I am still an amateur.  Learning as I go, I started on this in January, 2019.  Finished it on 01/26/19.
+
+June 2023: I still feel a touch of fondness toward this monolithic chunk of code.  It continues to do
+its job flawlessly, and because of that, has earned the right to continue."""
 
 import os
 import sys
@@ -31,7 +34,9 @@ parserohd.add_argument("-dd", "--ddebug", help="Turn on DEEP debugging output to
 ## Get the HOME environment variable
 #
 ohdHome = os.getcwd()
-version = "v2.1.1"
+version = "v2.2.0"
+#
+## v2.2.0 - Adds camera recording when door is opened.
 #
 ## ConfigParser init area.  Get some info out of working.conf.
 #
@@ -55,7 +60,7 @@ else:
 #
 ## End Command line arguments parsing
 
-logger.info(" - - - - - - - ohd.py INITIAL CONFIGURATION COMPLETE - - - - - - - - - - - - - - ")
+logger.info(" - - - - - - - ohd.py " + version + " INITIAL CONFIGURATION COMPLETE - - - - - - - - - - - ")
 logger.info("'HOME' path is: " + ohdHome)
 global DoorStat, bpStat, pirStat, pill2kill, Qtest, openFirst, bpFirst, tt, QmsgRcvdSent, bpLimit, bpLimNot
 DoorStat = "closed"
@@ -73,7 +78,7 @@ def main():
     bpFirst = 0
     openFirst = 0
     mdMsgSent = 0
-    ohdsendmail.msgS("ohd " + version + " Status Change", "Garage Door Monitor started normally at ")
+    ohdsendmail.msgS("ohd " + version + " Status Change", "Garage Door Monitor "+ version +" started normally at ")
     pill2kill = threading.Event()
     bpStatv = bpStat
     pt = threading.Thread(target=getPins, args=(pill2kill,bpStatv,))
@@ -99,6 +104,7 @@ def main():
 ## ByPass OFF and Door OPEN - - this is the ALARM STATE
 #
         if bpStat == 'Off' and DoorStat == 'open' and openFirst == 0:   # First time: Notify Door is OPEN
+            camson()
             logger.info("ByPass is OFF and door is OPEN")
             openFirst = 1
             bpFirst = 0
@@ -122,13 +128,15 @@ def main():
                 ttStart = time.time()
             else:
                 if Qtest == "Quiet" and msgAuth == "Yes" and QmsgRcvdSent == 0:
-                    ohdsendmail.msgS("Message Received", "A Quiet instruction was received from " + rmFrom + " at ") # the module function being called adds the timestamp.
+                    ohdsendmail.msgS("Message Received", "A Quiet instruction was received from " + rmFrom + " at ") 
+                    # the module function being called adds the timestamp.
                     QmsgRcvdSent = 1
 #
 ## Turning ByPass ON while the Door is OPEN -- Notify once only
 #
         if bpStat == 'On' and DoorStat == 'open':
             if bpFirst == 0:
+                camsoff()
                 logger.info("Door OPEN and ByPass ON" + ". bpFirst=" + str(bpFirst))
                 bpStatv = bpStat
                 ohdsendmail.main(bpStatv)
@@ -160,6 +168,7 @@ def main():
             Qtest = "[]"            # Reset Qtest
             QmsgRcvdSent = 0        # Reset Qmsg
             bpStatv = bpStatv
+            camsoff()
             ohdsendmail.main(bpStatv)
             logger.info("bpFirst set to " + str(bpFirst))
             if argsohd.debug:
@@ -190,6 +199,7 @@ def main():
                 time.sleep(1)
             openFirst = 0
             bpFirst = 0
+            camsoff()
             logger.info("bpFirst set to " + str(bpFirst))
 #
 ## Check to see if ByPass was left on after hours.  If so, notify.  This relates to NotifyBPLimit in ohd.conf.
@@ -245,9 +255,9 @@ def main():
 ## When something stops all this from being True, then we fall off the planet.
 ## I probably need do some exception catching stuff here . . .
 #
-    else:
-        logger.info("Fell out of the Main() Function")
-        log.flush()
+    
+    logger.info("Fell out of the Main() Function")
+    log.flush()
 #
 ##
 ### AUXILLIARY FUNCTIONS
@@ -312,40 +322,45 @@ def getPIR(stop_event):
         logger.info("getPIR dropped out")
         pass
 
+def camson():
+    requests.get('http://192.168.1.22:8090/command.cgi?cmd=record&tag=PIR%20tripped.')
+    logger.info('OHD opened. Camera recording started.')
+    # smt = threading.Thread(target=ohdsendmail.msgS, args=("PIR", "The Front Porch motion detector was tripped "))
+
+def camsoff():
+    requests.get('http://192.168.1.22:8090/command.cgi?cmd=recordStop')
+    logger.info('Camera recording stopped. OHD closed.')
 
 def SignalHandler(signal, frame):
-        global pill2kill
-        print("SignalHandler invoked")
-        pill2kill.set()
-        logger.info(" - - - - - - - - - Cleaning up - - - - - - - - - - - - ")
-        GPIO.cleanup()
-        logger.debug("Finished GPIO.cleanup() in SignalHandler")
-        logger.info("        Shutting down gracefully       ")
-        ohdsendmail.msgS("ohd Status Change", "Shutdown Initiated")
-        logger.debug("Sent 'Shutdown Now' message")
-        logger.debug("Wrote to log in SignalHandler")
-        # logger.info("Finished SignalHandler")
+    global pill2kill
+    print("SignalHandler invoked")
+    pill2kill.set()
+    logger.info(" - - - - - - - - - Cleaning up - - - - - - - - - - - - ")
+    GPIO.cleanup()
+    logger.debug("Finished GPIO.cleanup() in SignalHandler")
+    logger.info("        Shutting down gracefully       ")
+    ohdsendmail.msgS("ohd Status Change", "Shutdown Initiated")
+    logger.debug("Sent 'Shutdown Now' message")
+    logger.debug("Wrote to log in SignalHandler")
+    # logger.info("Finished SignalHandler")
 #        logger.flush()
 #        logger.close()
-        sys.exit(0)
+    sys.exit(0)
 
 
 
 if __name__ == "__main__":
-        global pill2kill
-        import traceback
-        try:
-            signal.signal(signal.SIGINT, SignalHandler)  ## This one catches CTRL-C from the local keyboard
-            signal.signal(signal.SIGTERM, SignalHandler) ## This one catches the Terminate signal from the system
-            logger.info(" Top of try")
-            while True:
-                main()
-            pass
+    # global pill2kill
+    import traceback
+    try:
+        signal.signal(signal.SIGINT, SignalHandler)  ## This one catches CTRL-C from the local keyboard
+        signal.signal(signal.SIGTERM, SignalHandler) ## This one catches the Terminate signal from the system
+        logger.info(" Top of try")
+        while True:
+            main()
 
-            logger.info("Bottom of try")
-#            logger.flush()
-        except Exception:
-            pill2kill.set()
-            error = traceback.print_exc()
-            logger.debug(error)
-            logger.info("That's all folks.  Goodbye")
+    except Exception:
+        pill2kill.set()
+        error = traceback.print_exc()
+        logger.debug(error)
+        logger.info("That's all folks.  Goodbye")

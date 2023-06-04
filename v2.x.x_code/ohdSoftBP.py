@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
 
-# import time,os,logging,configparser,argparse,traceback,signal,sys,subprocess,io
-import time,os,sys,pickle
+import time
+import os
+import sys
+import pickle
 from time import sleep
 
 #
 ## - - - - - TEST CODE BELOW HERE - - - -
 #
-def main():
+def main():  ## this is for testing only.
     ohdSBPHome = os.getcwd()
     blinkOn()
     sleep(60)
