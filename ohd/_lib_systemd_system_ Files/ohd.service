@@ -1,5 +1,5 @@
 [Unit]
-Description=Garage door monitor, 2019 update. ohd.service
+Description=Garage door monitor. ohd.service
 After=network.target
 
 [Service]
