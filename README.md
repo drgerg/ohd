@@ -1,5 +1,11 @@
 # ohd - (OverHeadDoor) Garage Door Monitor
 
+It is now June, 2023.  DoorPi, which runs **ohd**, has been chugging along out there in the garage since 2015 with minimal intervention.  It's still running Raspbian Buster, and quite frankly, I'm taking a 'if it ain't broke, don't fix it' approach at this point.
+
+v2.2.0 adds camera recording when the door opens, which I should have done some time ago.  It was the addition of another Pi cam in the garage that prompted it.  Works great. The cameras are running into AgentDVR on a Ubuntu machine, and have no real connection to **ohd** other than the fact that we turn recording on and off under certain circumstances.
+
+### History
+
 For decades, I wanted a simple way to keep track of whether my garage door was open or closed.  
 I started this project in 2015 and it does exactly what I need. The project eventually morphed into a component of
 what I have come to call my [PiNet](https://github.com/casspop/PiNet), a network of Raspberry Pi's that perform various useful functions around my property.
